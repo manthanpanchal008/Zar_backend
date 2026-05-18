@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+<%- include('../partials/admin-head', { title: 'Edit Product - Zar Jweller' }) %>
+<body>
+  <div id="ebazar-layout" class="theme-blue">
+    <%- include('../partials/admin-sidebar', { user, activePage: 'products' }) %>
+
+    <div class="main px-lg-4 px-md-4">
+      <%- include('../partials/admin-header', { user, pageHeading: 'Edit Product' }) %>
+
+      <div class="body d-flex py-3">
+        <div class="container-xxl">
+          <% if (error) { %>
+            <div class="alert alert-danger shadow-sm" role="alert"><%= error %></div>
+          <% } %>
+
+          <div class="card border-0 mb-3">
+            <div class="card-header py-3 bg-transparent border-bottom-0 d-flex justify-content-between align-items-center">
+              <h6 class="m-0 fw-bold">Update Product</h6>
+              <a href="/products" class="btn btn-outline-secondary">Back to Products</a>
+            </div>
+            <div class="card-body">
+              <form action="/products/edit/<%= item.id %>" method="post" enctype="multipart/form-data" class="row g-3">
+                <input type="hidden" id="original_images" name="original_images" value="<%= JSON.stringify(item.product_images || []) %>">
+                <input type="hidden" name="existing_weight_specifications" value="<%= JSON.stringify(item.weight_specifications || []) %>">
+                <input type="hidden" name="existing_technical_specifications" value="<%= JSON.stringify(item.technical_specifications || []) %>">
+
+                <div class="col-md-6">
+                  <label for="category_id" class="form-label">Category from Collections Jewellery <span class="text-danger">*</span></label>
+                  <select id="category_id" name="category_id" class="form-select" required>
+                    <option value="">-- Select Category --</option>
+                    <% categories.forEach((category) => { %>
+                      <option value="<%= category.id %>" <%= Number(item.category_id) === Number(category.id) ? 'selected' : '' %>>
+                        <%= category.category %>
+                      </option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="subcategory_id" class="form-label">Subcategory <span class="text-danger">*</span></label>
+                  <select id="subcategory_id" name="subcategory_id" class="form-select" required>
+                    <option value="">-- Select Subcategory --</option>
+                    <% subcategories.forEach((subcategory) => { %>
+                      <option
+                        value="<%= subcategory.id %>"
+                        data-category-id="<%= subcategory.category_id %>"
+                        <%= Number(item.subcategory_id) === Number(subcategory.id) ? 'selected' : '' %>
+                      >
+                        <%= subcategory.category %>
+                      </option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="title" class="form-label">Product Title <span class="text-danger">*</span></label>
+                  <input type="text" id="title" name="title" class="form-control" value="<%= item.title || '' %>" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="collection_name" class="form-label">Collection Name <span class="text-danger">*</span></label>
+                  <input type="text" id="collection_name" name="collection_name" class="form-control" value="<%= item.collection_name || '' %>" required>
+                </div>
+                <div class="col-12">
+                  <label for="short_description" class="form-label">Short Description</label>
+                  <textarea id="short_description" name="short_description" class="form-control summernote" rows="2"><%= item.short_description || '' %></textarea>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="number_of_pcs" class="form-label">Number of Pcs <span class="text-danger">*</span></label>
+                  <input type="number" step="1" min="1" id="number_of_pcs" name="number_of_pcs" class="form-control" value="<%= item.number_of_pcs || '' %>" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="display_finish" class="form-label">Finish Summary</label>
+                  <input type="text" id="display_finish" name="display_finish" class="form-control" value="<%= item.display_finish || '' %>">
+                </div>
+
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label mb-0">Weight Rows</label>
+                    <button type="button" id="addWeightRow" class="btn btn-sm btn-outline-primary">Add Weight Row</button>
+                  </div>
+                  <div id="weightRows" class="d-flex flex-column gap-2">
+                    <% (item.weight_specifications || [{ label: '', value: '' }]).forEach((row) => { %>
+                      <div class="row g-2 weight-row">
+                        <div class="col-md-4">
+                          <input type="text" name="weight_label" class="form-control" placeholder="Label (e.g. Gross Weight)" value="<%= row.label || '' %>">
+                        </div>
+                        <div class="col-md-7">
+                          <input type="text" name="weight_value" class="form-control" placeholder="Value (e.g. 42.500 grams)" value="<%= row.value || '' %>">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                          <button type="button" class="btn btn-sm btn-outline-danger remove-row">X</button>
+                        </div>
+                      </div>
+                    <% }) %>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label mb-0">Technical Specification Rows</label>
+                    <button type="button" id="addTechnicalRow" class="btn btn-sm btn-outline-primary">Add Spec Row</button>
+                  </div>
+                  <div id="technicalRows" class="d-flex flex-column gap-2">
+                    <% (item.technical_specifications || [{ feature: '', details: '' }]).forEach((row) => { %>
+                      <div class="row g-2 technical-row">
+                        <div class="col-md-4">
+                          <input type="text" name="technical_feature" class="form-control" placeholder="Feature" value="<%= row.feature || '' %>">
+                        </div>
+                        <div class="col-md-7">
+                          <input type="text" name="technical_detail" class="form-control" placeholder="Details" value="<%= row.details || '' %>">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                          <button type="button" class="btn btn-sm btn-outline-danger remove-row">X</button>
+                        </div>
+                      </div>
+                    <% }) %>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label for="manufacturing_support" class="form-label">Manufacturing & Customization Support</label>
+                  <textarea id="manufacturing_support" name="manufacturing_support" class="form-control summernote" rows="3"><%= item.manufacturing_support || '' %></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label for="product_url" class="form-label">Product URL</label>
+                  <input type="text" id="product_url" name="product_url" class="form-control" value="<%= item.product_url || '' %>">
+                </div>
+                <div class="col-md-6">
+                  <label for="images" class="form-label">Product Images</label>
+                  <input type="file" id="images" name="images" class="form-control" accept="image/*" multiple>
+                  <small class="text-muted">Upload new files to keep existing images and add more. Total images are capped at 10.</small>
+                </div>
+
+                <% if (item.product_images && item.product_images.length > 0) { %>
+                  <div class="col-12">
+                    <label class="form-label">Current Images</label>
+                    <div id="currentImages" class="d-flex flex-wrap gap-2">
+                      <% item.product_images.forEach((image) => { %>
+                        <div class="position-relative product-image-item" data-image-name="<%= image %>" style="width:84px;height:84px;">
+                          <input type="hidden" name="existing_images[]" value="<%= image %>">
+                          <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 image-remove-btn" title="Remove this image">×</button>
+                          <img src="/uploads/products/<%= image %>" alt="Product image" style="width:84px;height:84px;object-fit:cover;border-radius:8px;">
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+                <% } %>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Update Product</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/bundles/libscripts.bundle.js"></script>
+  <script src="/js/template.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.$ && $.fn && $.fn.summernote) {
+        $('#short_description').summernote({
+          height: 140,
+          toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']],
+            ['view', ['codeview']]
+          ]
+        });
+
+        $('#manufacturing_support').summernote({
+          height: 160,
+          toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']],
+            ['view', ['codeview']]
+          ]
+        });
+      }
+
+      function attachRemoveHandlers(container) {
+        container.querySelectorAll('.remove-row').forEach(function (btn) {
+          btn.onclick = function () {
+            const row = btn.closest('.row');
+            if (container.querySelectorAll('.row').length > 1) {
+              row.remove();
+            }
+          };
+        });
+      }
+
+      function addRow(container, templateClass, fieldsHtml) {
+        const wrapper = document.createElement('div');
+        wrapper.className = `row g-2 ${templateClass}`;
+        wrapper.innerHTML = fieldsHtml;
+        container.appendChild(wrapper);
+        attachRemoveHandlers(container);
+      }
+
+      const weightRows = document.getElementById('weightRows');
+      const technicalRows = document.getElementById('technicalRows');
+      const categorySelect = document.getElementById('category_id');
+      const subcategorySelect = document.getElementById('subcategory_id');
+
+      async function loadSubcategories() {
+        const categoryId = String(categorySelect.value || '').trim();
+        const selectedSubcategoryId = String(subcategorySelect.value || '');
+        subcategorySelect.disabled = true;
+
+        try {
+          const response = await fetch(`/api/product-subcategories?category_id=${encodeURIComponent(categoryId)}`);
+          const payload = await response.json();
+          const subcategories = Array.isArray(payload.subcategories) ? payload.subcategories : [];
+
+          subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+          subcategories.forEach(function (subcategory) {
+            const option = document.createElement('option');
+            option.value = String(subcategory.id);
+            option.textContent = subcategory.category;
+            option.dataset.categoryId = String(subcategory.category_id || '');
+            if (String(subcategory.id) === selectedSubcategoryId) {
+              option.selected = true;
+            }
+            subcategorySelect.appendChild(option);
+          });
+        } catch (_error) {
+          subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+        } finally {
+          subcategorySelect.disabled = false;
+        }
+      }
+
+      categorySelect.addEventListener('change', function () {
+        subcategorySelect.value = '';
+        loadSubcategories();
+      });
+
+      function attachImageRemovalHandlers() {
+        document.querySelectorAll('#currentImages .image-remove-btn').forEach(function (button) {
+          button.onclick = function () {
+            const wrapper = button.closest('.product-image-item');
+            if (!wrapper) return;
+            wrapper.remove();
+          };
+        });
+      }
+
+      if (categorySelect.value) {
+        loadSubcategories();
+      }
+
+      document.getElementById('addWeightRow').addEventListener('click', function () {
+        addRow(
+          weightRows,
+          'weight-row',
+          '<div class="col-md-4"><input type="text" name="weight_label" class="form-control" placeholder="Label (e.g. Gross Weight)"></div>' +
+          '<div class="col-md-7"><input type="text" name="weight_value" class="form-control" placeholder="Value (e.g. 42.500 grams)"></div>' +
+          '<div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row">X</button></div>'
+        );
+      });
+
+      document.getElementById('addTechnicalRow').addEventListener('click', function () {
+        addRow(
+          technicalRows,
+          'technical-row',
+          '<div class="col-md-4"><input type="text" name="technical_feature" class="form-control" placeholder="Feature"></div>' +
+          '<div class="col-md-7"><input type="text" name="technical_detail" class="form-control" placeholder="Details"></div>' +
+          '<div class="col-md-1 d-flex align-items-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row">X</button></div>'
+        );
+      });
+
+      attachRemoveHandlers(weightRows);
+      attachRemoveHandlers(technicalRows);
+      attachImageRemovalHandlers();
+    });
+  </script>
+</body>
+</html>

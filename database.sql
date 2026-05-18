@@ -1,0 +1,100 @@
+﻿-- Create the database for Zar Jweller backend
+CREATE DATABASE IF NOT EXISTS zar_jeweller;
+USE zar_jeweller;
+
+-- Users table for admin authentication
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'staff') NOT NULL DEFAULT 'staff',
+  email_verified_at TIMESTAMP NULL DEFAULT NULL,
+  remember_token VARCHAR(100) NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Contacts table for contact form submissions
+CREATE TABLE IF NOT EXISTS contacts (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  company VARCHAR(255) DEFAULT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50) NOT NULL,
+  subject VARCHAR(100) NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Jewellery table for admin inventory
+CREATE TABLE IF NOT EXISTS jewels (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  collection_type ENUM('18k', '22k') NOT NULL DEFAULT '22k',
+  category VARCHAR(255) NOT NULL,
+  collection_url VARCHAR(500) DEFAULT NULL,
+  image VARCHAR(500) NOT NULL,
+  deleted_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Events table for exhibitions and shows
+CREATE TABLE IF NOT EXISTS events (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  location VARCHAR(255) DEFAULT NULL,
+  start_date DATE DEFAULT NULL,
+  end_date DATE DEFAULT NULL,
+  description TEXT DEFAULT NULL,
+  event_image LONGTEXT DEFAULT NULL,
+  event_url VARCHAR(500) DEFAULT NULL,
+  status ENUM('upcoming', 'past') NOT NULL DEFAULT 'upcoming',
+  deleted_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Products table for detailed product module
+CREATE TABLE IF NOT EXISTS products (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  category_id BIGINT(20) UNSIGNED DEFAULT NULL,
+  subcategory_id BIGINT(20) UNSIGNED DEFAULT NULL,
+  title VARCHAR(255) NOT NULL,
+  collection_name VARCHAR(255) NOT NULL,
+  short_description TEXT DEFAULT NULL,
+  number_of_pcs INT(11) DEFAULT NULL,
+  display_finish VARCHAR(255) DEFAULT NULL,
+  weight_specifications LONGTEXT DEFAULT NULL,
+  technical_specifications LONGTEXT DEFAULT NULL,
+  manufacturing_support TEXT DEFAULT NULL,
+  product_url VARCHAR(500) DEFAULT NULL,
+  product_images LONGTEXT DEFAULT NULL,
+  deleted_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Subcategories table for category-wise collection grouping
+CREATE TABLE IF NOT EXISTS jewel_subcategories (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  category_id BIGINT(20) UNSIGNED NOT NULL,
+  collection_type ENUM('18k', '22k') NOT NULL DEFAULT '22k',
+  category VARCHAR(255) NOT NULL,
+  subcategory_url VARCHAR(500) DEFAULT NULL,
+  image VARCHAR(500) NOT NULL,
+  deleted_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Clientele table for managed clientele logos
+CREATE TABLE `clientele` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `clientele_title` varchar(255) NOT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `clientele_image` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

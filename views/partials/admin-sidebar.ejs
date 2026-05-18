@@ -1,0 +1,67 @@
+<div class="sidebar px-4 py-4 py-md-4 me-0">
+  <div class="d-flex flex-column h-100">
+    <a href="/dashboard" class="mb-0 brand-icon">
+      <span class="logo-icon">
+        <img src="/icon-1.png" alt="Zar Jweller logo" class="brand-logo-image">
+      </span>
+      <span class="logo-text">Zar Jweller</span>
+    </a>
+
+    <ul class="menu-list flex-grow-1 mt-3">
+      <li>
+        <a class="m-link <%= activePage === 'dashboard' ? 'active' : '' %>" href="/dashboard">
+          <i class="icofont-home fs-5"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a class="m-link <%= activePage === 'events' ? 'active' : '' %>" href="/events">
+          <i class="icofont-calendar fs-5"></i>
+          <span>Events</span>
+        </a>
+      </li>
+      <li>
+        <a class="m-link <%= activePage === 'collectionsjewellery' ? 'active' : '' %>" href="/collectionsjewellery">
+          <i class="icofont-diamond fs-5"></i>
+          <span>Collections Jewellery</span>
+        </a>
+      </li>
+      <li>
+        <a class="m-link <%= activePage === 'subcategories' ? 'active' : '' %>" href="/subcategories">
+          <i class="icofont-diamond fs-5"></i>
+          <span>Subcategories</span>
+        </a>
+      </li>
+      <li>
+        <a class="m-link <%= activePage === 'products' ? 'active' : '' %>" href="/products">
+          <i class="icofont-jewlery fs-5"></i>
+          <span>Products</span>
+        </a>
+      </li>
+      <li>
+        <a class="m-link <%= activePage === 'clientele' ? 'active' : '' %>" href="/clientele">
+          <i class="icofont-users fs-5"></i>
+          <span>Clientele</span>
+        </a>
+      </li>
+      <% if (user && user.role === 'admin') { %>
+        <li>
+          <a class="m-link <%= activePage === 'users' ? 'active' : '' %>" href="/users">
+            <i class="icofont-users-social fs-5"></i>
+            <span>Users</span>
+          </a>
+        </li>
+      <% } %>
+      <li>
+        <a class="m-link" href="/logout">
+          <i class="icofont-logout fs-5"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+
+    <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+      <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+    </button>
+  </div>
+</div>

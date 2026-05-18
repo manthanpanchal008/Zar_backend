@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+<%- include('../partials/admin-head', { title: 'Events - Zar Jweller' }) %>
+<body>
+  <div id="ebazar-layout" class="theme-blue">
+    <%- include('../partials/admin-sidebar', { user, activePage: 'events' }) %>
+
+    <div class="main px-lg-4 px-md-4">
+      <%- include('../partials/admin-header', { user, pageHeading: 'Events' }) %>
+
+      <div class="body d-flex py-3">
+        <div class="container-xxl">
+          <% if (message) { %>
+            <div class="alert alert-success shadow-sm" role="alert"><%= message %></div>
+          <% } %>
+          <% if (error) { %>
+            <div class="alert alert-danger shadow-sm" role="alert"><%= error %></div>
+          <% } %>
+
+          <div class="card">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+              <h6 class="m-0 fw-bold">Exhibitions &amp; Shows</h6>
+              <% if (user.role === 'admin') { %>
+                <a href="/events/add" class="btn btn-primary">Add New Event</a>
+              <% } %>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="myDataTable" class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Images</th>
+                      <th>Location</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Status</th>
+                      <% if (user.role === 'admin') { %><th>Actions</th><% } %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% events.forEach((ev) => { %>
+                      <tr>
+                        <td>
+                          <div class="fw-semibold"><%= ev.title %></div>
+                          <% if (ev.description) { %>
+                            <% const plainDescription = ev.description.replace(/<[^>]*>/g, '').trim(); %>
+                            <small class="text-muted"><%= plainDescription.length > 60 ? plainDescription.slice(0, 60) + '…' : plainDescription %></small>
+                          <% } %>
+                        </td>
+                        <td>
+                          <% if (ev.image_urls && ev.image_urls.length > 0) { %>
+                            <div class="d-flex align-items-center gap-2">
+                              <img src="<%= ev.image_urls[0] %>" alt="Event cover" style="width:44px;height:44px;object-fit:cover;border-radius:6px;">
+                              <small class="d-block text-muted"><%= ev.event_image.length %> image(s)</small>
+                            </div>
+                          <% } else { %>
+                            <span class="text-muted">-</span>
+                          <% } %>
+                        </td>
+                        <td><%= ev.location || '-' %></td>
+                        <td><%= ev.start_date ? new Date(ev.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' %></td>
+                        <td><%= ev.end_date ? new Date(ev.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' %></td>
+                        <td>
+                          <span class="badge <%= ev.status === 'upcoming' ? 'bg-success' : 'bg-secondary' %> text-capitalize">
+                            <%= ev.status %>
+                          </span>
+                        </td>
+                        <% if (user.role === 'admin') { %>
+                          <td>
+                            <a href="/events/edit/<%= ev.id %>" class="btn btn-sm btn-warning">Edit</a>
+                            <form action="/events/delete/<%= ev.id %>" method="post" class="d-inline" onsubmit="return confirm('Delete event &quot;<%= ev.title %>&quot;?')">
+                              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                          </td>
+                        <% } %>
+                      </tr>
+                    <% }) %>
+                    <% if (events.length === 0) { %>
+                      <tr>
+                        <td colspan="<%= user.role === 'admin' ? 7 : 6 %>" class="text-center text-muted py-4">No events found.</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/bundles/libscripts.bundle.js"></script>
+  <script src="/assets/bundles/dataTables.bundle.js"></script>
+  <script src="/js/template.js"></script>
+  <script>
+    if (window.$ && $('#myDataTable').length) {
+      $('#myDataTable').addClass('nowrap').dataTable({ responsive: true });
+    }
+  </script>
+</body>
+</html>
