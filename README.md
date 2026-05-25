@@ -1,6 +1,6 @@
-﻿# Zar Jweller Backend
+﻿# Zar jewels Backend
 
-A lightweight backend API for the Zar Jweller frontend. It accepts contact submissions and stores them in MySQL.
+A lightweight backend API for the Zar jewels frontend. It accepts contact submissions and stores them in MySQL.
 
 ## Features
 

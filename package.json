@@ -1,7 +1,7 @@
 {
   "name": "jewellery-admin-panel",
   "version": "1.0.0",
-  "description": "Backend API for Zar Jweller frontend",
+  "description": "Backend API for Zar jewels frontend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

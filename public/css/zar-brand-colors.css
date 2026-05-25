@@ -1,0 +1,380 @@
+/* 
+ * ZAR Jewels - Brand Color Scheme
+ * Luxury Jewellery Admin Panel Theme
+ */
+
+:root {
+  /* Brand Colors */
+  --zar-sidebar-bg: #000000;        /* Luxury & premium feel */
+  --zar-primary: #D0B480;           /* Gold jewellery identity */
+  --zar-heading: #A38274;           /* Elegant soft-gold typography */
+  --zar-text-secondary: #666666;    /* Clean readability */
+  --zar-bg-content: #F8F6F2;        /* Soft luxury cream */
+  --zar-card-bg: #FFFFFF;           /* Clean contrast */
+  
+  /* Supporting Colors */
+  --zar-text-primary: #000000;
+  --zar-border: #E8E4DE;
+  --zar-hover: rgba(208, 180, 128, 0.1);
+}
+
+/* ============================================
+   SIDEBAR - Black Background with Gold Accents
+   ============================================ */
+
+#ebazar-layout .sidebar {
+  background-color: var(--zar-sidebar-bg);
+  border-right: 3px solid var(--zar-primary);
+}
+
+#ebazar-layout .sidebar .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.75rem 1.25rem !important;
+}
+
+#ebazar-layout .sidebar .nav-link i {
+  color: var(--zar-primary);
+  margin-right: 0.75rem;
+}
+
+#ebazar-layout .sidebar .nav-link:hover {
+  color: var(--zar-primary) !important;
+  background-color: rgba(208, 180, 128, 0.15);
+  padding-left: 1.5rem !important;
+}
+
+#ebazar-layout .sidebar .nav-link.active {
+  background-color: rgba(208, 180, 128, 0.2);
+  color: var(--zar-primary) !important;
+  border-left: 4px solid var(--zar-primary);
+  padding-left: calc(1.25rem - 4px) !important;
+  font-weight: 600;
+}
+
+#ebazar-layout .sidebar .logo-text {
+  color: var(--zar-primary);
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+#ebazar-layout .sidebar .logo-icon {
+  background: linear-gradient(135deg, var(--zar-primary), var(--zar-heading));
+  border-radius: 8px;
+}
+
+#ebazar-layout .sidebar .menu-title {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-left: 1.25rem !important;
+}
+
+/* ============================================
+   MAIN CONTENT BACKGROUND
+   ============================================ */
+
+#ebazar-layout .main {
+  background-color: var(--zar-bg-content);
+}
+
+body {
+  background-color: var(--zar-bg-content);
+}
+
+/* ============================================
+   HEADINGS - Soft Gold Color
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--zar-heading) !important;
+  font-weight: 600;
+}
+
+/* ============================================
+   CARDS - White Background
+   ============================================ */
+
+.card {
+  background-color: var(--zar-card-bg);
+  border: 1px solid var(--zar-border);
+  border-top: 3px solid var(--zar-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background-color: rgba(208, 180, 128, 0.08);
+  border-bottom: 1px solid var(--zar-border);
+  color: var(--zar-heading);
+  font-weight: 600;
+}
+
+.card-title {
+  color: var(--zar-heading);
+}
+
+.card-text {
+  color: var(--zar-text-secondary);
+}
+
+/* ============================================
+   BUTTONS - Primary (Gold)
+   ============================================ */
+
+.btn-primary {
+  background-color: var(--zar-primary) !important;
+  border-color: var(--zar-primary) !important;
+  color: var(--zar-text-primary) !important;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: var(--zar-heading) !important;
+  border-color: var(--zar-heading) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  background-color: var(--zar-heading) !important;
+  border-color: var(--zar-heading) !important;
+  box-shadow: 0 0 0 0.2rem rgba(208, 180, 128, 0.5) !important;
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+.form-control,
+.form-select {
+  background-color: var(--zar-card-bg);
+  border: 1px solid var(--zar-border);
+  color: var(--zar-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--zar-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(208, 180, 128, 0.25) !important;
+  background-color: var(--zar-card-bg);
+}
+
+.form-control::placeholder {
+  color: var(--zar-text-secondary);
+}
+
+.form-check-input {
+  border-color: var(--zar-border);
+}
+
+.form-check-input:checked {
+  background-color: var(--zar-primary) !important;
+  border-color: var(--zar-primary) !important;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+
+.table {
+  color: var(--zar-text-primary);
+}
+
+.table thead th {
+  background-color: rgba(208, 180, 128, 0.1);
+  color: var(--zar-heading);
+  font-weight: 600;
+  border-color: var(--zar-border);
+}
+
+.table tbody td {
+  border-color: var(--zar-border);
+  color: var(--zar-text-secondary);
+}
+
+.table-hover tbody tr:hover {
+  background-color: var(--zar-hover);
+}
+
+/* ============================================
+   BADGES & ALERTS
+   ============================================ */
+
+.badge-primary {
+  background-color: var(--zar-primary) !important;
+  color: var(--zar-text-primary) !important;
+}
+
+.alert-primary {
+  background-color: rgba(208, 180, 128, 0.1);
+  border-color: var(--zar-primary);
+  color: var(--zar-text-primary);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+#ebazar-layout .header {
+  background-color: var(--zar-card-bg);
+  border-bottom: 1px solid var(--zar-border);
+}
+
+#ebazar-layout .header .navbar-brand {
+  color: var(--zar-heading) !important;
+}
+
+#ebazar-layout .header a {
+  color: var(--zar-text-primary);
+}
+
+#ebazar-layout .header a:hover {
+  color: var(--zar-primary);
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.page-link {
+  color: var(--zar-primary);
+  background-color: var(--zar-card-bg);
+  border-color: var(--zar-border);
+}
+
+.page-link:hover {
+  background-color: var(--zar-bg-content);
+  color: var(--zar-heading);
+  border-color: var(--zar-primary);
+}
+
+.page-item.active .page-link {
+  background-color: var(--zar-primary) !important;
+  border-color: var(--zar-primary) !important;
+  color: var(--zar-text-primary) !important;
+}
+
+/* ============================================
+   DROPDOWNS
+   ============================================ */
+
+.dropdown-menu {
+  background-color: var(--zar-card-bg);
+  border-color: var(--zar-border);
+}
+
+.dropdown-item {
+  color: var(--zar-text-primary);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--zar-hover);
+  color: var(--zar-primary);
+}
+
+.dropdown-item.active {
+  background-color: var(--zar-primary) !important;
+  color: var(--zar-text-primary) !important;
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+
+a {
+  color: var(--zar-primary);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--zar-heading);
+  text-decoration: none;
+}
+
+/* ============================================
+   TEXT UTILITIES
+   ============================================ */
+
+.text-primary {
+  color: var(--zar-primary) !important;
+}
+
+.text-secondary {
+  color: var(--zar-text-secondary) !important;
+}
+
+.text-heading {
+  color: var(--zar-heading) !important;
+}
+
+.bg-primary {
+  background-color: var(--zar-primary) !important;
+}
+
+.bg-light {
+  background-color: var(--zar-bg-content) !important;
+}
+
+/* ============================================
+   BORDERS
+   ============================================ */
+
+.border {
+  border-color: var(--zar-border) !important;
+}
+
+.border-top {
+  border-top-color: var(--zar-primary) !important;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
+.progress {
+  background-color: var(--zar-bg-content);
+}
+
+.progress-bar {
+  background-color: var(--zar-primary) !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--zar-bg-content);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--zar-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--zar-heading);
+}
+
+/* ============================================
+   SMOOTH TRANSITIONS
+   ============================================ */
+
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+button, .btn {
+  transition: all 0.3s ease;
+}

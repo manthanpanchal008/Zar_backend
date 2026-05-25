@@ -4,6 +4,7 @@ const cors = require('cors');
 const session = require('express-session');
 const { PORT, SESSION_SECRET, CORS_ORIGIN } = require('./config/env');
 const { ensureSchema } = require('./config/bootstrap');
+const COLORS = require('./config/colors');
 const authRoutes = require('./routes/authRoutes');
 const apiRoutes = require('./routes/apiRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
@@ -110,7 +111,10 @@ app.use(collectionsjewelleryRoutes);
 app.use(subcategoryRoutes);
 app.use(productRoutes);
 
-app.use((req, res) => res.status(404).json({ error: 'Not found' }));
+// 404 handler - must be last
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
 
 async function start() {
   try {

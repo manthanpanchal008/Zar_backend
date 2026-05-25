@@ -5,11 +5,6 @@ const { getSafeUserFromDbRow } = require('../middleware/auth');
 
 const router = express.Router();
 
-/**
- * Normalize a bcrypt hash from PHP's $2y$ prefix to Node's $2b$ prefix.
- * Both use identical algorithms — only the identifier byte differs.
- * Without this, bcrypt.compare() silently returns false for PHP-generated hashes.
- */
 function normalizeBcryptHash(hash) {
   if (typeof hash === 'string' && hash.startsWith('$2y$')) {
     return '$2b$' + hash.slice(4);
@@ -34,7 +29,6 @@ router.post('/login', async (req, res) => {
     const user = await findUserByEmail(email.trim().toLowerCase());
     if (!user) return res.render('login', { message: 'Invalid credentials.' });
 
-    // Normalize $2y$ (PHP bcrypt) → $2b$ (Node bcrypt) before comparing
     const normalizedHash = normalizeBcryptHash(user.password);
     const valid = await bcrypt.compare(password, normalizedHash);
     if (!valid) return res.render('login', { message: 'Invalid credentials.' });
@@ -47,7 +41,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// API login — session only, returns JSON (no JWT)
 router.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -59,7 +52,6 @@ router.post('/api/login', async (req, res) => {
     const user = await findUserByEmail(email.trim().toLowerCase());
     if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
 
-    // Normalize $2y$ (PHP bcrypt) → $2b$ (Node bcrypt) before comparing
     const normalizedHash = normalizeBcryptHash(user.password);
     const valid = await bcrypt.compare(password, normalizedHash);
     if (!valid) return res.status(401).json({ error: 'Invalid credentials.' });

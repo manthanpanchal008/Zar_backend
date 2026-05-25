@@ -1,0 +1,423 @@
+{
+  "info": {
+    "name": "Zar Jewels Backend API",
+    "description": "Complete API collection for Zar Jewels Backend - Frontend data fetching endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Health & Auth",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/health",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            },
+            "description": "Check if the server is running"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/me",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ]
+            },
+            "description": "Get current logged-in user information (requires authentication)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Collections Jewellery",
+      "item": [
+        {
+          "name": "Get All Jewels by Collection Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/jewels?collection_type=18k",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "jewels"
+              ],
+              "query": [
+                {
+                  "key": "collection_type",
+                  "value": "18k",
+                  "description": "Collection type - use '18k' or '22k'"
+                }
+              ]
+            },
+            "description": "Get all jewels for a specific collection type (18k or 22k)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/product-categories",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "product-categories"
+              ],
+              "query": [
+                {
+                  "key": "collection_type",
+                  "value": "18k",
+                  "description": "Optional: Filter by collection type (18k or 22k)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all product categories, optionally filtered by collection type"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subcategories by Category and Collection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/subcategories?collection_type=18k&category_id=1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "subcategories"
+              ],
+              "query": [
+                {
+                  "key": "collection_type",
+                  "value": "18k",
+                  "description": "Collection type - use '18k' or '22k' (required)"
+                },
+                {
+                  "key": "category_id",
+                  "value": "1",
+                  "description": "Category ID (required)"
+                }
+              ]
+            },
+            "description": "Get subcategories for a specific collection type and category"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Get all products without any filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Category Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products?category=Rings",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Rings",
+                  "description": "Category name to filter products"
+                }
+              ]
+            },
+            "description": "Get products filtered by category name"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Category ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products?category_id=1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "category_id",
+                  "value": "1",
+                  "description": "Category ID to filter products"
+                }
+              ]
+            },
+            "description": "Get products filtered by category ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Category and Subcategory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products?category_id=1&subcategory_id=5",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "category_id",
+                  "value": "1",
+                  "description": "Category ID (required for this filter)"
+                },
+                {
+                  "key": "subcategory_id",
+                  "value": "5",
+                  "description": "Subcategory ID (required for this filter)"
+                }
+              ]
+            },
+            "description": "Get products filtered by both category ID and subcategory ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Subcategories by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/product-subcategories?category_id=1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "product-subcategories"
+              ],
+              "query": [
+                {
+                  "key": "category_id",
+                  "value": "1",
+                  "description": "Category ID (required)"
+                }
+              ]
+            },
+            "description": "Get subcategories for a specific product category"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products/1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            },
+            "description": "Get a specific product by its ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/events",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
+            },
+            "description": "Get all active events"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Event by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/events/1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "1"
+              ]
+            },
+            "description": "Get a specific event by its ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Contacts",
+      "item": [
+        {
+          "name": "Get All Contacts (Admin Only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/contacts",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "contacts"
+              ]
+            },
+            "description": "Get all submitted contacts (requires admin authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Contact Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"company\": \"ABC Corp\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1-555-0123\",\n  \"subject\": \"Product Inquiry\",\n  \"message\": \"I am interested in your jewelry collection.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/contact",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "contact"
+              ]
+            },
+            "description": "Submit a contact form message (public endpoint)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users (Admin Only)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "Get all users (requires admin authentication)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Base URL for the API. Update this to match your server URL (e.g., https://api.example.com)"
+    }
+  ]
+}

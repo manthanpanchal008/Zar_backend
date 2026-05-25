@@ -1,4 +1,4 @@
-﻿-- Create the database for Zar Jweller backend
+﻿-- Create the database for Zar jewels backend
 CREATE DATABASE IF NOT EXISTS zar_jeweller;
 USE zar_jeweller;
 

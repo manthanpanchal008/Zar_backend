@@ -1,0 +1,593 @@
+/* 
+ * ZAR Jewels - Brand Color Theme
+ * Unified color palette used across the admin panel
+ */
+
+:root {
+  /* Brand Colors */
+  --zar-golden: #D0B480;
+  --zar-black: #000000;
+  --zar-title: #A38274;
+  --zar-grey: #666666;
+  
+  /* Derived Colors (lighter/darker variations) */
+  --zar-golden-light: rgba(208, 180, 128, 0.1);
+  --zar-golden-lighter: rgba(208, 180, 128, 0.05);
+  --zar-title-light: rgba(163, 130, 116, 0.1);
+  --zar-grey-light: rgba(102, 102, 102, 0.1);
+  --zar-grey-lighter: rgba(102, 102, 102, 0.05);
+  
+  /* Override Bootstrap primary color with golden */
+  --bs-primary: var(--zar-golden);
+  --bs-primary-rgb: 208, 180, 128;
+  
+  /* Override secondary color with title */
+  --bs-secondary: var(--zar-title);
+  --bs-secondary-rgb: 163, 130, 116;
+  
+  /* Override text colors */
+  --bs-body-color: var(--zar-black);
+  --bs-body-color-rgb: 0, 0, 0;
+  
+  /* Link colors */
+  --bs-link-color: var(--zar-golden);
+  --bs-link-hover-color: var(--zar-title);
+}
+
+/* ============================================
+   PRIMARY ELEMENTS (Golden)
+   ============================================ */
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--zar-golden) !important;
+  border-color: var(--zar-golden) !important;
+  color: var(--zar-black) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--zar-title) !important;
+  border-color: var(--zar-title) !important;
+  color: var(--zar-black) !important;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  background-color: var(--zar-title) !important;
+  border-color: var(--zar-title) !important;
+}
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: var(--zar-title) !important;
+  border-color: var(--zar-title) !important;
+}
+
+/* Primary backgrounds */
+.bg-primary {
+  background-color: var(--zar-golden) !important;
+}
+
+.bg-primary-subtle {
+  background-color: var(--zar-golden-light) !important;
+}
+
+/* Primary text */
+.text-primary {
+  color: var(--zar-golden) !important;
+}
+
+/* Primary borders */
+.border-primary {
+  border-color: var(--zar-golden) !important;
+}
+
+/* ============================================
+   SECONDARY ELEMENTS (Title/Brown)
+   ============================================ */
+
+.btn-secondary {
+  background-color: var(--zar-title) !important;
+  border-color: var(--zar-title) !important;
+  color: var(--zar-black) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--zar-grey) !important;
+  border-color: var(--zar-grey) !important;
+  color: #fff !important;
+}
+
+.bg-secondary {
+  background-color: var(--zar-title) !important;
+}
+
+.bg-secondary-subtle {
+  background-color: var(--zar-title-light) !important;
+}
+
+.text-secondary {
+  color: var(--zar-title) !important;
+}
+
+.border-secondary {
+  border-color: var(--zar-title) !important;
+}
+
+/* ============================================
+   NEUTRAL ELEMENTS (Grey/Black)
+   ============================================ */
+
+.bg-dark {
+  background-color: var(--zar-grey) !important;
+}
+
+.text-dark {
+  color: var(--zar-black) !important;
+}
+
+.text-muted {
+  color: var(--zar-grey) !important;
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--zar-golden) !important;
+  box-shadow: 0 0 0 0.2rem rgba(208, 180, 128, 0.25) !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--zar-golden) !important;
+  border-color: var(--zar-golden) !important;
+}
+
+.form-check-input:focus {
+  border-color: var(--zar-golden) !important;
+  box-shadow: 0 0 0 0.2rem rgba(208, 180, 128, 0.25) !important;
+}
+
+.form-switch .form-check-input:checked {
+  background-color: var(--zar-golden) !important;
+}
+
+/* ============================================
+   ALERTS & BADGES
+   ============================================ */
+
+.badge-primary {
+  background-color: var(--zar-golden) !important;
+  color: var(--zar-black) !important;
+}
+
+.alert-primary {
+  background-color: var(--zar-golden-light) !important;
+  border-color: var(--zar-golden) !important;
+  color: var(--zar-black) !important;
+}
+
+.alert-primary hr {
+  border-top-color: var(--zar-golden) !important;
+}
+
+.alert-primary .alert-link {
+  color: var(--zar-black) !important;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.navbar-brand,
+.nav-link {
+  color: var(--zar-black) !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--zar-golden) !important;
+}
+
+.breadcrumb .active {
+  color: var(--zar-black) !important;
+}
+
+.breadcrumb a {
+  color: var(--zar-golden) !important;
+}
+
+.breadcrumb a:hover {
+  color: var(--zar-title) !important;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+
+.table thead th {
+  background-color: var(--zar-golden-lighter);
+  color: var(--zar-black);
+  border-color: var(--zar-grey-lighter);
+}
+
+.table-hover tbody tr:hover {
+  background-color: var(--zar-golden-lighter) !important;
+}
+
+.table-active {
+  background-color: var(--zar-golden-light) !important;
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.page-link {
+  color: var(--zar-golden);
+}
+
+.page-link:hover {
+  background-color: var(--zar-golden-lighter);
+  color: var(--zar-title);
+}
+
+.page-item.active .page-link {
+  background-color: var(--zar-golden) !important;
+  border-color: var(--zar-golden) !important;
+  color: var(--zar-black) !important;
+}
+
+/* ============================================
+   DROPDOWNS
+   ============================================ */
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--zar-golden-light);
+  color: var(--zar-black);
+}
+
+.dropdown-item.active {
+  background-color: var(--zar-golden) !important;
+  color: var(--zar-black) !important;
+}
+
+/* ============================================
+   CARDS & PANELS
+   ============================================ */
+
+.card {
+  border-color: var(--zar-grey-lighter);
+}
+
+.card-header {
+  background-color: var(--zar-golden-lighter);
+  border-color: var(--zar-grey-lighter);
+  color: var(--zar-black);
+}
+
+.card-title {
+  color: var(--zar-title);
+}
+
+.card-text {
+  color: var(--zar-black);
+}
+
+/* ============================================
+   HEADINGS
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--zar-title) !important;
+}
+
+/* ============================================
+   PROGRESS BARS
+   ============================================ */
+
+.progress-bar {
+  background-color: var(--zar-golden) !important;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.border-golden {
+  border-color: var(--zar-golden) !important;
+}
+
+.border-title {
+  border-color: var(--zar-title) !important;
+}
+
+.border-grey {
+  border-color: var(--zar-grey) !important;
+}
+
+.text-golden {
+  color: var(--zar-golden) !important;
+}
+
+.text-title {
+  color: var(--zar-title) !important;
+}
+
+.text-grey {
+  color: var(--zar-grey) !important;
+}
+
+.bg-golden {
+  background-color: var(--zar-golden) !important;
+}
+
+.bg-title {
+  background-color: var(--zar-title) !important;
+}
+
+.bg-grey {
+  background-color: var(--zar-grey) !important;
+}
+
+/* ============================================
+   SIDEBAR (eBazar Theme)
+   ============================================ */
+
+#ebazar-layout .sidebar {
+  background: linear-gradient(135deg, #f5ede0 0%, #faf7f2 100%);
+  border-right: 2px solid var(--zar-golden);
+}
+
+#ebazar-layout .sidebar .nav-link {
+  color: var(--zar-black) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem !important;
+}
+
+#ebazar-layout .sidebar .nav-link i {
+  margin-right: 0.5rem;
+  color: var(--zar-golden);
+  font-size: 1.1rem;
+}
+
+#ebazar-layout .sidebar .nav-link:hover {
+  color: var(--zar-golden) !important;
+  background-color: rgba(208, 180, 128, 0.2) !important;
+  border-left: 4px solid var(--zar-golden) !important;
+  padding-left: calc(1.5rem - 4px) !important;
+  transition: all 0.3s ease;
+}
+
+#ebazar-layout .sidebar .nav-link.active {
+  background-color: rgba(208, 180, 128, 0.3) !important;
+  color: var(--zar-golden) !important;
+  border-left: 4px solid var(--zar-golden) !important;
+  padding-left: calc(1.5rem - 4px) !important;
+  font-weight: 700;
+}
+
+#ebazar-layout .sidebar .logo-text {
+  color: var(--zar-title);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+#ebazar-layout .sidebar .logo-icon {
+  background: linear-gradient(135deg, var(--zar-golden), var(--zar-title));
+  border-radius: 6px;
+}
+
+#ebazar-layout .sidebar .menu-title {
+  color: var(--zar-grey);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-left: 1.5rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* ============================================
+   HEADER (eBazar Theme)
+   ============================================ */
+
+#ebazar-layout .header {
+  background-color: #fff;
+  border-bottom: 1px solid var(--zar-grey-lighter);
+}
+
+#ebazar-layout .header a {
+  color: var(--zar-black);
+}
+
+#ebazar-layout .header a:hover {
+  color: var(--zar-golden);
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+
+#ebazar-layout .main {
+  background-color: #f9f9f9;
+}
+
+#ebazar-layout .card {
+  border: 1px solid var(--zar-grey-lighter);
+  border-top: 3px solid var(--zar-golden);
+}
+
+/* ============================================
+   LOGIN PAGE
+   ============================================ */
+
+.auth-bg {
+  background: linear-gradient(120deg, #faf8f3 0%, #f5f0e8 40%, #fdfbf7 100%);
+}
+
+.auth-form-container {
+  border-top: 3px solid var(--zar-golden);
+}
+
+.login-form .form-control:focus {
+  border-color: var(--zar-golden);
+  box-shadow: 0 0 0 0.2rem rgba(208, 180, 128, 0.25);
+}
+
+.login-btn {
+  background-color: var(--zar-golden);
+  color: var(--zar-black);
+  border: none;
+}
+
+.login-btn:hover {
+  background-color: var(--zar-title);
+  color: var(--zar-black);
+}
+
+/* ============================================
+    STATUS COLORS (Success/Warning/Error/Info)
+    ============================================ */
+
+.badge-success {
+  background-color: var(--zar-success) !important;
+  color: white !important;
+}
+
+.badge-warning {
+  background-color: var(--zar-warning) !important;
+  color: white !important;
+}
+
+.badge-danger,
+.badge-error {
+  background-color: var(--zar-error) !important;
+  color: white !important;
+}
+
+.badge-info {
+  background-color: var(--zar-info) !important;
+  color: white !important;
+}
+
+.alert-success {
+  background-color: var(--zar-success-light) !important;
+  border-color: var(--zar-success) !important;
+  color: var(--zar-success) !important;
+}
+
+.alert-warning {
+  background-color: var(--zar-warning-light) !important;
+  border-color: var(--zar-warning) !important;
+  color: var(--zar-warning) !important;
+}
+
+.alert-danger {
+  background-color: var(--zar-error-light) !important;
+  border-color: var(--zar-error) !important;
+  color: var(--zar-error) !important;
+}
+
+.alert-info {
+  background-color: var(--zar-info-light) !important;
+  border-color: var(--zar-info) !important;
+  color: var(--zar-info) !important;
+}
+
+.btn-success {
+  background-color: var(--zar-success) !important;
+  border-color: var(--zar-success) !important;
+  color: white !important;
+}
+
+.btn-warning {
+  background-color: var(--zar-warning) !important;
+  border-color: var(--zar-warning) !important;
+  color: white !important;
+}
+
+.btn-danger {
+  background-color: var(--zar-error) !important;
+  border-color: var(--zar-error) !important;
+  color: white !important;
+}
+
+.btn-info {
+  background-color: var(--zar-info) !important;
+  border-color: var(--zar-info) !important;
+  color: white !important;
+}
+
+.text-success {
+  color: var(--zar-success) !important;
+}
+
+.text-warning {
+  color: var(--zar-warning) !important;
+}
+
+.text-danger {
+  color: var(--zar-error) !important;
+}
+
+.text-info {
+  color: var(--zar-info) !important;
+}
+
+.bg-success-subtle {
+  background-color: var(--zar-success-light) !important;
+}
+
+.bg-warning-subtle {
+  background-color: var(--zar-warning-light) !important;
+}
+
+.bg-danger-subtle {
+  background-color: var(--zar-error-light) !important;
+}
+
+.bg-info-subtle {
+  background-color: var(--zar-info-light) !important;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--zar-grey-lighter);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--zar-golden);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--zar-title);
+}
+
+/* ============================================
+   TRANSITIONS & EFFECTS
+   ============================================ */
+
+a, button, input, select, textarea {
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  text-decoration: none;
+}

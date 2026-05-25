@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en" dir="ltr">
-<%- include('../partials/admin-head', { title: 'Add Product - Zar Jweller' }) %>
+<%- include('../partials/admin-head', { title: 'Add Product - Zar jewels' }) %>
 <body>
   <div id="ebazar-layout" class="theme-blue">
     <%- include('../partials/admin-sidebar', { user, activePage: 'products' }) %>
@@ -65,7 +65,7 @@
                   <input type="number" step="1" min="1" id="number_of_pcs" name="number_of_pcs" class="form-control" value="<%= formData.number_of_pcs || '' %>" required>
                 </div>
                 <div class="col-md-6">
-                  <label for="display_finish" class="form-label">Finish Summary</label>
+                  <label for="display_finish" class="form-label">Finish S0ummary</label>
                   <input type="text" id="display_finish" name="display_finish" class="form-control" value="<%= formData.display_finish || '' %>">
                 </div>
 
@@ -93,7 +93,7 @@
 
                 <div class="col-12">
                   <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label class="form-label mb-0">Technical Specification Rows</label>
+                    <label class="form-label mb-0">Technical Specification</label>
                     <button type="button" id="addTechnicalRow" class="btn btn-sm btn-outline-primary">Add Spec Row</button>
                   </div>
                   <div id="technicalRows" class="d-flex flex-column gap-2">
