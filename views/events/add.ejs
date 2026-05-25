@@ -76,7 +76,7 @@
                   <small class="text-muted">You can upload up to 10 images.</small>
                 </div>
 
-                <% const   = (typeof uploadedImagePaths !== 'undefined' && Array.isArray(uploadedImagePaths)) ? uploadedImagePaths : []; %>
+                <% const safeUploadedImagePaths = (typeof uploadedImagePaths !== 'undefined' && Array.isArray(uploadedImagePaths)) ? uploadedImagePaths : []; %>
                 <% if (safeUploadedImagePaths.length > 0) { %>
                   <div class="col-12">
                     <div class="d-flex flex-wrap gap-2">
