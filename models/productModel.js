@@ -69,9 +69,12 @@ async function listProducts() {
     `SELECT
       p.id,
       p.category_id,
-      p.subcategory_id,
-      j.category AS category_name,
-      s.category AS subcategory_name,
+      p.gold_type_id,
+      p.making_type_id,
+      p.sku,
+      c.name AS category_name,
+      g.name AS gold_type_name,
+      m.name AS making_type_name,
       p.title,
       p.collection_name,
       p.short_description,
@@ -85,8 +88,9 @@ async function listProducts() {
       p.created_at,
       p.updated_at
     FROM products p
-    LEFT JOIN jewels j ON j.id = p.category_id
-    LEFT JOIN jewel_subcategories s ON s.id = p.subcategory_id
+    LEFT JOIN categories c ON c.id = p.category_id
+    LEFT JOIN gold_types g ON g.id = p.gold_type_id
+    LEFT JOIN making_types m ON m.id = p.making_type_id
     WHERE p.deleted_at IS NULL
     ORDER BY p.id DESC`
   );
@@ -99,9 +103,12 @@ async function listProductsByCategory(categoryName) {
     `SELECT
       p.id,
       p.category_id,
-      p.subcategory_id,
-      j.category AS category_name,
-      s.category AS subcategory_name,
+      p.gold_type_id,
+      p.making_type_id,
+      p.sku,
+      c.name AS category_name,
+      g.name AS gold_type_name,
+      m.name AS making_type_name,
       p.title,
       p.collection_name,
       p.short_description,
@@ -115,9 +122,10 @@ async function listProductsByCategory(categoryName) {
       p.created_at,
       p.updated_at
     FROM products p
-    LEFT JOIN jewels j ON j.id = p.category_id
-    LEFT JOIN jewel_subcategories s ON s.id = p.subcategory_id
-    WHERE j.category = ? AND p.deleted_at IS NULL
+    LEFT JOIN categories c ON c.id = p.category_id
+    LEFT JOIN gold_types g ON g.id = p.gold_type_id
+    LEFT JOIN making_types m ON m.id = p.making_type_id
+    WHERE c.name = ? AND p.deleted_at IS NULL
     ORDER BY p.id DESC`,
     [categoryName]
   );
@@ -126,13 +134,17 @@ async function listProductsByCategory(categoryName) {
 }
 
 async function listProductsByCategoryAndSubcategory({ categoryId, subcategoryId }) {
+  // Subcategories are removed, so this serves as a fallback to just category filtering.
   const [rows] = await pool.execute(
     `SELECT
       p.id,
       p.category_id,
-      p.subcategory_id,
-      j.category AS category_name,
-      s.category AS subcategory_name,
+      p.gold_type_id,
+      p.making_type_id,
+      p.sku,
+      c.name AS category_name,
+      g.name AS gold_type_name,
+      m.name AS making_type_name,
       p.title,
       p.collection_name,
       p.short_description,
@@ -146,13 +158,12 @@ async function listProductsByCategoryAndSubcategory({ categoryId, subcategoryId 
       p.created_at,
       p.updated_at
     FROM products p
-    LEFT JOIN jewels j ON j.id = p.category_id
-    LEFT JOIN jewel_subcategories s ON s.id = p.subcategory_id
-    WHERE p.category_id = ?
-      AND p.subcategory_id = ?
-      AND p.deleted_at IS NULL
+    LEFT JOIN categories c ON c.id = p.category_id
+    LEFT JOIN gold_types g ON g.id = p.gold_type_id
+    LEFT JOIN making_types m ON m.id = p.making_type_id
+    WHERE p.category_id = ? AND p.deleted_at IS NULL
     ORDER BY p.id DESC`,
-    [categoryId, subcategoryId]
+    [categoryId]
   );
 
   return rows.map(withParsedImages);
@@ -162,7 +173,9 @@ async function createProduct(product) {
   const [result] = await pool.execute(
     `INSERT INTO products (
       category_id,
-      subcategory_id,
+      gold_type_id,
+      making_type_id,
+      sku,
       title,
       collection_name,
       short_description,
@@ -173,10 +186,12 @@ async function createProduct(product) {
       manufacturing_support,
       product_url,
       product_images
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       product.category_id,
-      product.subcategory_id,
+      product.gold_type_id,
+      product.making_type_id,
+      product.sku,
       product.title,
       product.collection_name,
       product.short_description,
@@ -198,9 +213,12 @@ async function findProductById(id) {
     `SELECT
       p.id,
       p.category_id,
-      p.subcategory_id,
-      j.category AS category_name,
-      s.category AS subcategory_name,
+      p.gold_type_id,
+      p.making_type_id,
+      p.sku,
+      c.name AS category_name,
+      g.name AS gold_type_name,
+      m.name AS making_type_name,
       p.title,
       p.collection_name,
       p.short_description,
@@ -214,8 +232,9 @@ async function findProductById(id) {
       p.created_at,
       p.updated_at
     FROM products p
-    LEFT JOIN jewels j ON j.id = p.category_id
-    LEFT JOIN jewel_subcategories s ON s.id = p.subcategory_id
+    LEFT JOIN categories c ON c.id = p.category_id
+    LEFT JOIN gold_types g ON g.id = p.gold_type_id
+    LEFT JOIN making_types m ON m.id = p.making_type_id
     WHERE p.id = ? AND p.deleted_at IS NULL`,
     [id]
   );
@@ -228,7 +247,9 @@ async function updateProductById(id, product) {
   await pool.execute(
     `UPDATE products SET
       category_id = ?,
-      subcategory_id = ?,
+      gold_type_id = ?,
+      making_type_id = ?,
+      sku = ?,
       title = ?,
       collection_name = ?,
       short_description = ?,
@@ -243,7 +264,9 @@ async function updateProductById(id, product) {
     WHERE id = ? AND deleted_at IS NULL`,
     [
       product.category_id,
-      product.subcategory_id,
+      product.gold_type_id,
+      product.making_type_id,
+      product.sku,
       product.title,
       product.collection_name,
       product.short_description,
@@ -266,6 +289,14 @@ async function deleteProductById(id) {
   );
 }
 
+async function findProductBySku(sku) {
+  const [rows] = await pool.execute(
+    'SELECT id FROM products WHERE sku = ? AND deleted_at IS NULL',
+    [sku]
+  );
+  return rows[0] || null;
+}
+
 module.exports = {
   listProducts,
   listProductsByCategory,
@@ -274,4 +305,5 @@ module.exports = {
   findProductById,
   updateProductById,
   deleteProductById,
+  findProductBySku,
 };

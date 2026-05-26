@@ -1,76 +1,36 @@
 const pool = require('../config/db');
 
-async function listJewels() {
-  const [rows] = await pool.execute(
-    'SELECT id, collection_type, category, collection_url, image, created_at, updated_at FROM jewels WHERE deleted_at IS NULL ORDER BY id DESC'
-  );
-  return rows;
-}
-
 async function listJewelsByCollectionType(collectionType) {
+  const searchPattern = `%${String(collectionType || '').toUpperCase()}%`;
   const [rows] = await pool.execute(
-    'SELECT id, collection_type, category, collection_url, image, created_at, updated_at FROM jewels WHERE collection_type = ? AND deleted_at IS NULL ORDER BY id DESC',
-    [collectionType]
+    'SELECT id, name AS category, image, is_active FROM gold_types WHERE name LIKE ? AND deleted_at IS NULL',
+    [searchPattern]
   );
-  return rows;
+  return rows.map(r => ({
+    id: r.id,
+    collection_type: collectionType,
+    category: r.category,
+    collection_url: '',
+    image: r.image
+  }));
 }
 
 async function listDistinctJewelCategories() {
   const [rows] = await pool.execute(
-    'SELECT DISTINCT category FROM jewels WHERE deleted_at IS NULL AND category IS NOT NULL AND category <> "" ORDER BY category ASC'
+    'SELECT DISTINCT name FROM categories WHERE deleted_at IS NULL AND is_active = 1'
   );
-  return rows.map((row) => row.category);
+  return rows.map(r => r.name);
 }
 
 async function listJewelsForCategorySelection() {
   const [rows] = await pool.execute(
-    `SELECT
-      id,
-      TRIM(category) AS category,
-      collection_url,
-      collection_type
-    FROM jewels
-    WHERE deleted_at IS NULL
-      AND category IS NOT NULL
-      AND TRIM(category) <> ''
-    ORDER BY category ASC, id DESC`
+    'SELECT id, name AS category, "22k" AS collection_type FROM gold_types WHERE deleted_at IS NULL AND is_active = 1'
   );
   return rows;
 }
 
-async function createJewel({ collection_type, category, collection_url, image }) {
-  await pool.execute(
-    'INSERT INTO jewels (collection_type, category, collection_url, image) VALUES (?, ?, ?, ?)',
-    [collection_type, category, collection_url || null, image || null]
-  );
-}
-
-async function findJewelById(id) {
-  const [rows] = await pool.execute(
-    'SELECT id, collection_type, category, collection_url, image, created_at, updated_at FROM jewels WHERE id = ? AND deleted_at IS NULL',
-    [id]
-  );
-  return rows[0] || null;
-}
-
-async function updateJewelById(id, { collection_type, category, collection_url, image }) {
-  await pool.execute(
-    'UPDATE jewels SET collection_type = ?, category = ?, collection_url = ?, image = ?, updated_at = NOW() WHERE id = ? AND deleted_at IS NULL',
-    [collection_type, category, collection_url || null, image, id]
-  );
-}
-
-async function deleteJewelById(id) {
-  await pool.execute('UPDATE jewels SET deleted_at = NOW(), updated_at = NOW() WHERE id = ? AND deleted_at IS NULL', [id]);
-}
-
 module.exports = {
-  listJewels,
   listJewelsByCollectionType,
   listDistinctJewelCategories,
-  listJewelsForCategorySelection,
-  createJewel,
-  findJewelById,
-  updateJewelById,
-  deleteJewelById,
+  listJewelsForCategorySelection
 };

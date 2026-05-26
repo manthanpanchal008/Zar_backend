@@ -8,6 +8,28 @@ const {
   DB_NAME,
 } = require('./env');
 
+async function addColumnIfNotExists(connection, tableName, columnName, columnDefinition) {
+  const [columns] = await connection.query(`
+    SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?;
+  `, [tableName, columnName]);
+
+  if (columns.length === 0) {
+    await connection.query(`ALTER TABLE \`${tableName}\` ADD COLUMN \`${columnName}\` ${columnDefinition};`);
+  }
+}
+
+async function addForeignKeyIfNotExists(connection, tableName, constraintName, foreignKeyQuery) {
+  const [constraints] = await connection.query(`
+    SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+    WHERE CONSTRAINT_SCHEMA = DATABASE() AND TABLE_NAME = ? AND CONSTRAINT_NAME = ?;
+  `, [tableName, constraintName]);
+
+  if (constraints.length === 0) {
+    await connection.query(`ALTER TABLE \`${tableName}\` ADD CONSTRAINT \`${constraintName}\` ${foreignKeyQuery};`);
+  }
+}
+
 async function ensureSchema() {
   let connection;
   try {
@@ -52,10 +74,7 @@ async function ensureSchema() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
-  await connection.query(`
-    ALTER TABLE users
-    ADD COLUMN IF NOT EXISTS role ENUM('admin', 'staff') NOT NULL DEFAULT 'staff' AFTER password;
-  `);
+  await addColumnIfNotExists(connection, 'users', 'role', "ENUM('admin', 'staff') NOT NULL DEFAULT 'staff' AFTER password");
 
   await connection.query(`
     UPDATE users
@@ -141,10 +160,7 @@ async function ensureSchema() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
-  await connection.query(`
-    ALTER TABLE events
-    ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP NULL DEFAULT NULL AFTER status;
-  `);
+  await addColumnIfNotExists(connection, 'events', 'deleted_at', "TIMESTAMP NULL DEFAULT NULL AFTER status");
 
   await connection.query(`
     CREATE TABLE IF NOT EXISTS clientele (
@@ -157,15 +173,9 @@ async function ensureSchema() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
-  await connection.query(`
-    ALTER TABLE clientele
-    ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP NULL DEFAULT NULL AFTER clientele_image;
-  `);
+  await addColumnIfNotExists(connection, 'clientele', 'deleted_at', "TIMESTAMP NULL DEFAULT NULL AFTER clientele_image");
 
-  await connection.query(`
-    ALTER TABLE events
-    ADD COLUMN IF NOT EXISTS event_image LONGTEXT DEFAULT NULL AFTER description;
-  `);
+  await addColumnIfNotExists(connection, 'events', 'event_image', "LONGTEXT DEFAULT NULL AFTER description");
 
   // Migrate data only if the old columns still exist
   const [evCols] = await connection.query(`
@@ -207,36 +217,15 @@ async function ensureSchema() {
       ALTER TABLE events CHANGE COLUMN link_url event_url VARCHAR(500) DEFAULT NULL;
     `);
   } else {
-    await connection.query(`
-      ALTER TABLE events ADD COLUMN IF NOT EXISTS event_url VARCHAR(500) DEFAULT NULL;
-    `);
+    await addColumnIfNotExists(connection, 'events', 'event_url', "VARCHAR(500) DEFAULT NULL");
   }
 
   // Jewels — migrate to minimal collection schema
-  await connection.query(`
-    ALTER TABLE jewels
-    ADD COLUMN IF NOT EXISTS collection_type ENUM('18k', '22k') NOT NULL DEFAULT '22k' AFTER id;
-  `);
-
-  await connection.query(`
-    ALTER TABLE jewels
-    ADD COLUMN IF NOT EXISTS category VARCHAR(255) NULL AFTER collection_type;
-  `);
-
-  await connection.query(`
-    ALTER TABLE jewels
-    ADD COLUMN IF NOT EXISTS collection_url VARCHAR(500) DEFAULT NULL AFTER category;
-  `);
-
-  await connection.query(`
-    ALTER TABLE jewels
-    ADD COLUMN IF NOT EXISTS image VARCHAR(500) NULL AFTER category;
-  `);
-
-  await connection.query(`
-    ALTER TABLE jewels
-    ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP NULL DEFAULT NULL AFTER image;
-  `);
+  await addColumnIfNotExists(connection, 'jewels', 'collection_type', "ENUM('18k', '22k') NOT NULL DEFAULT '22k' AFTER id");
+  await addColumnIfNotExists(connection, 'jewels', 'category', "VARCHAR(255) NULL AFTER collection_type");
+  await addColumnIfNotExists(connection, 'jewels', 'collection_url', "VARCHAR(500) DEFAULT NULL AFTER category");
+  await addColumnIfNotExists(connection, 'jewels', 'image', "VARCHAR(500) NULL AFTER category");
+  await addColumnIfNotExists(connection, 'jewels', 'deleted_at', "TIMESTAMP NULL DEFAULT NULL AFTER image");
 
   const [jewelCols] = await connection.query(`
     SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
@@ -295,14 +284,8 @@ async function ensureSchema() {
     await connection.query(`ALTER TABLE jewels DROP COLUMN karat;`);
   }
 
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS category_id BIGINT(20) UNSIGNED DEFAULT NULL AFTER id;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS subcategory_id BIGINT(20) UNSIGNED DEFAULT NULL AFTER category_id;
-  `);
+  await addColumnIfNotExists(connection, 'products', 'category_id', "BIGINT(20) UNSIGNED DEFAULT NULL AFTER id");
+  await addColumnIfNotExists(connection, 'products', 'subcategory_id', "BIGINT(20) UNSIGNED DEFAULT NULL AFTER category_id");
   const [productCols] = await connection.query(`
     SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'products';
@@ -336,55 +319,19 @@ async function ensureSchema() {
     `);
   }
 
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS title VARCHAR(255) NOT NULL DEFAULT '' AFTER category_id;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS collection_name VARCHAR(255) NOT NULL DEFAULT '' AFTER title;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS short_description TEXT DEFAULT NULL AFTER collection_name;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS number_of_pcs INT(11) DEFAULT NULL AFTER short_description;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS display_finish VARCHAR(255) DEFAULT NULL AFTER number_of_pcs;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS weight_specifications LONGTEXT DEFAULT NULL AFTER display_finish;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS technical_specifications LONGTEXT DEFAULT NULL AFTER weight_specifications;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS manufacturing_support TEXT DEFAULT NULL AFTER technical_specifications;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS product_url VARCHAR(500) DEFAULT NULL AFTER manufacturing_support;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS product_images LONGTEXT DEFAULT NULL AFTER product_url;
-  `);
-  await connection.query(`
-    ALTER TABLE products
-    ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP NULL DEFAULT NULL AFTER product_images;
-  `);
+  await addColumnIfNotExists(connection, 'products', 'title', "VARCHAR(255) NOT NULL DEFAULT '' AFTER category_id");
+  await addColumnIfNotExists(connection, 'products', 'collection_name', "VARCHAR(255) NOT NULL DEFAULT '' AFTER title");
+  await addColumnIfNotExists(connection, 'products', 'short_description', "TEXT DEFAULT NULL AFTER collection_name");
+  await addColumnIfNotExists(connection, 'products', 'number_of_pcs', "INT(11) DEFAULT NULL AFTER short_description");
+  await addColumnIfNotExists(connection, 'products', 'display_finish', "VARCHAR(255) DEFAULT NULL AFTER number_of_pcs");
+  await addColumnIfNotExists(connection, 'products', 'weight_specifications', "LONGTEXT DEFAULT NULL AFTER display_finish");
+  await addColumnIfNotExists(connection, 'products', 'technical_specifications', "LONGTEXT DEFAULT NULL AFTER weight_specifications");
+  await addColumnIfNotExists(connection, 'products', 'manufacturing_support', "TEXT DEFAULT NULL AFTER technical_specifications");
+  await addColumnIfNotExists(connection, 'products', 'product_url', "VARCHAR(500) DEFAULT NULL AFTER manufacturing_support");
+  await addColumnIfNotExists(connection, 'products', 'product_images', "LONGTEXT DEFAULT NULL AFTER product_url");
+  await addColumnIfNotExists(connection, 'products', 'deleted_at', "TIMESTAMP NULL DEFAULT NULL AFTER product_images");
 
-  await connection.query(`
-    ALTER TABLE jewel_subcategories
-    ADD COLUMN IF NOT EXISTS subcategory_url VARCHAR(500) DEFAULT NULL AFTER category;
-  `);
+  await addColumnIfNotExists(connection, 'jewel_subcategories', 'subcategory_url', "VARCHAR(500) DEFAULT NULL AFTER category");
 
   if (productColumnSet.has('gross_weight_grams') || productColumnSet.has('net_gold_weight_grams') || productColumnSet.has('stone_weight_grams') || productColumnSet.has('stone_weight_carats')) {
     await connection.query(`
@@ -476,6 +423,66 @@ async function ensureSchema() {
       row.id,
     ]);
   }
+
+  // Create gold_types table
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS gold_types (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      purity DECIMAL(5,2) NOT NULL,
+      image VARCHAR(500) DEFAULT NULL,
+      is_active TINYINT(1) NOT NULL DEFAULT 1,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP NULL DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  // Create categories table
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      image VARCHAR(500) DEFAULT NULL,
+      is_active TINYINT(1) NOT NULL DEFAULT 1,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP NULL DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  // Create making_types table
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS making_types (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      image VARCHAR(500) DEFAULT NULL,
+      is_active TINYINT(1) NOT NULL DEFAULT 1,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP NULL DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  // Clear existing category_id references on products if we are adding the constraint for the first time
+  const [fkChecks] = await connection.query(`
+    SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+    WHERE CONSTRAINT_SCHEMA = DATABASE() AND TABLE_NAME = 'products' AND CONSTRAINT_NAME = 'fk_products_category';
+  `);
+  if (fkChecks.length === 0) {
+    await connection.query('UPDATE products SET category_id = NULL;');
+  }
+
+  // Alter products table to add columns
+  await addColumnIfNotExists(connection, 'products', 'gold_type_id', "BIGINT(20) UNSIGNED DEFAULT NULL AFTER category_id");
+  await addColumnIfNotExists(connection, 'products', 'making_type_id', "BIGINT(20) UNSIGNED DEFAULT NULL AFTER subcategory_id");
+  await addColumnIfNotExists(connection, 'products', 'sku', "VARCHAR(255) DEFAULT NULL UNIQUE AFTER making_type_id");
+
+  // Add foreign keys
+  await addForeignKeyIfNotExists(connection, 'products', 'fk_products_gold_type', 'FOREIGN KEY (gold_type_id) REFERENCES gold_types(id) ON DELETE SET NULL');
+  await addForeignKeyIfNotExists(connection, 'products', 'fk_products_category', 'FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL');
+  await addForeignKeyIfNotExists(connection, 'products', 'fk_products_making_type', 'FOREIGN KEY (making_type_id) REFERENCES making_types(id) ON DELETE SET NULL');
 
   await connection.end();
 }

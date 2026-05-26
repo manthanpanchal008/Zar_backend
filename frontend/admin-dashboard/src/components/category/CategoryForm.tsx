@@ -1,0 +1,145 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { Button } from "@/components/ui/Button";
+import { API_BASE_URL, api, uploadConfig } from "@/lib/api";
+import type { CategoryNew } from "@/types";
+import { ImageUpload } from "@/components/ui/ImageUpload";
+
+type CategoryFormValues = {
+  name: string;
+  slug: string;
+  is_active: boolean;
+  image: FileList;
+};
+
+export function CategoryForm({ category }: { category?: CategoryNew }) {
+  const router = useRouter();
+  const [error, setError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<CategoryFormValues>({
+    defaultValues: {
+      name: category?.name || "",
+      slug: category?.slug || "",
+      is_active: category ? !!category.is_active : true,
+    },
+  });
+
+  const name = watch("name");
+
+  // Auto-generate slug from name on change
+  useEffect(() => {
+    if (category) return; // Do not auto-overwrite slug on edit unless user explicitly edits it
+    if (name) {
+      const generatedSlug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+      setValue("slug", generatedSlug);
+    }
+  }, [name, setValue, category]);
+
+  async function onSubmit(values: CategoryFormValues) {
+    setError("");
+    const formData = new FormData();
+    formData.append("name", values.name.trim());
+    formData.append("slug", values.slug.trim());
+    formData.append("is_active", values.is_active ? "1" : "0");
+
+    if (values.image?.[0]) {
+      formData.append("image", values.image[0]);
+    }
+
+    try {
+      if (category) {
+        await api.put(`/api/admin/categories/${category.id}`, formData, uploadConfig());
+      } else {
+        await api.post("/api/admin/categories", formData, uploadConfig());
+      }
+      router.push("/category");
+    } catch (requestError: any) {
+      setError(requestError.response?.data?.error || "Unable to save category.");
+    }
+  }
+
+  const imageUrl = category?.image_url || (category?.image ? `/uploads/categories/${category.image}` : null);
+
+  return (
+    <form className="space-y-4 max-w-lg" onSubmit={handleSubmit(onSubmit)}>
+      {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+
+      <label className="block">
+        <span className="mb-1 block text-sm font-semibold text-zar-title">Category Name *</span>
+        <input
+          className="form-input"
+          placeholder="e.g. Bangles, Ring, Mangalsutra"
+          {...register("name", { required: "Category name is required" })}
+        />
+        {errors.name ? <span className="text-xs text-red-600">{errors.name.message}</span> : null}
+      </label>
+
+      <label className="block">
+        <span className="mb-1 block text-sm font-semibold text-zar-title">Slug *</span>
+        <input
+          className="form-input"
+          placeholder="e.g. bangles"
+          {...register("slug", { required: "Slug is required" })}
+        />
+        {errors.slug ? <span className="text-xs text-red-600">{errors.slug.message}</span> : null}
+      </label>
+
+      <label className="flex items-center gap-2 py-1">
+        <input
+          type="checkbox"
+          className="rounded border-[#e7dfd3] text-zar-gold focus:ring-zar-gold"
+          {...register("is_active")}
+        />
+        <span className="text-sm font-semibold text-zar-title">Is Active</span>
+      </label>
+
+      <div className="block">
+        <span className="mb-1 block text-sm font-semibold text-zar-title">Image {category ? "" : "*"}</span>
+        <Controller
+          control={control}
+          name="image"
+          rules={{ required: category ? false : "Image is required" }}
+          render={({ field }) => (
+            <ImageUpload
+              onChange={field.onChange}
+              error={errors.image?.message}
+            />
+          )}
+        />
+      </div>
+
+      {imageUrl && (
+        <div className="space-y-1">
+          <span className="block text-xs font-semibold text-zar-muted">Current Image:</span>
+          <img
+            src={imageUrl.startsWith("http") ? imageUrl : `${API_BASE_URL}${imageUrl}`}
+            alt="Category preview"
+            className="h-20 w-20 object-cover rounded-lg border border-[#eee7dd]"
+          />
+        </div>
+      )}
+
+      <div className="flex gap-2 pt-2">
+        <Button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Saving..." : "Save Category"}
+        </Button>
+        <Button type="button" variant="secondary" onClick={() => router.push("/category")}>
+          Cancel
+        </Button>
+      </div>
+    </form>
+  );
+}

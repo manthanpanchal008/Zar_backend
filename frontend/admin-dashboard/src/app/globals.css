@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --zar-gold: #D0B480;
+  --zar-black: #000000;
+  --zar-title: #A38274;
+  --zar-muted: #666666;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--zar-black);
+  background: #f8f6f2;
+}
+
+.admin-table th {
+  color: var(--zar-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.admin-table td,
+.admin-table th {
+  border-bottom: 1px solid #eee7dd;
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+.form-input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e7dfd3;
+  background: #fff;
+  padding: 10px 12px;
+  color: #000;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--zar-gold);
+  box-shadow: 0 0 0 3px rgba(208, 180, 128, 0.25);
+}
+
+.rich-editor-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.rich-editor-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.rich-editor-content li {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.rich-editor-content:empty:before {
+  content: attr(data-placeholder);
+  color: var(--zar-muted);
+  cursor: text;
+}
+
