@@ -1,0 +1,106 @@
+.page {
+  padding-bottom: 80px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+.galleryColumn {
+  position: relative;
+  height: 100%;
+}
+
+.stickyGallery {
+  position: sticky;
+  top: 100px; /* Offset for header/navbar */
+}
+
+/* .infoColumn {
+  padding: 20px 0;
+} */
+
+.tradeHighlights {
+  background: linear-gradient(90deg, rgba(234, 225, 217, 0), #f9f4f0 49.04%, rgba(234, 225, 217, 0));
+}
+
+.tradeHighlightsInner {
+  padding: 100px 0px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.highlightCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+   gap: 20px;
+  padding: 0 32px;
+}
+
+.highlightCard:not(:last-child) {
+  border-right: 1px solid #c4b18f;
+}
+
+.highlightIcon {
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.highlightTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  line-height: 1.2;
+  color: #4f372f;
+}
+
+.highlightDescription {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #6f5a4d;
+  text-align: center;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .galleryColumn {
+    position: relative;
+    height: auto;
+  }
+
+  .stickyGallery {
+    position: static;
+  }
+
+  .infoColumn {
+    padding-top: 0;
+  }
+
+  .tradeHighlightsInner {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .highlightCard {
+    padding: 0;
+  }
+
+  .highlightCard:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid #c4b18f;
+    padding-bottom: 30px;
+  }
+}

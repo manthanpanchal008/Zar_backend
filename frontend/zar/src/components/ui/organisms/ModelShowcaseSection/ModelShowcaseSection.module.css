@@ -1,0 +1,228 @@
+.header {
+  text-align: center;
+  margin-bottom: 42px;
+}
+
+.header p {
+  margin-bottom: 20px;
+}
+
+/* Wrapper for slider + arrows positioning */
+.sliderWrapper {
+  position: relative;
+}
+
+.slider {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Non-active slides scale down, active stays full size */
+.slider :global(.swiper-slide) {
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease;
+  opacity: 1;
+}
+
+.slider :global(.swiper-slide-active) {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.slider :global(.swiper-slide) .cardLabel,
+.slider :global(.swiper-slide) .card a {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.slider :global(.swiper-slide-active) .cardLabel,
+.slider :global(.swiper-slide-active) .card a {
+  opacity: 1;
+}
+
+.slider :global(.swiper-slide-active) .viewer {
+  width: 100%;
+  height: 400px;
+}
+
+.card {
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 0;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.card a {
+  margin-inline: auto;
+}
+
+.modelWrapper {
+  position: relative;
+  height: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#default-poster {
+  width: 90%;
+  height: 90%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.viewer,
+.posterFrame {
+  width: 50%;
+  height: 340px;
+  display: block;
+}
+
+.viewer {
+  object-fit: cover;
+}
+
+.posterFrame {
+  position: relative;
+}
+
+.poster {
+  object-fit: contain;
+}
+
+.cardLabel {
+  display: block;
+  padding: 10px;
+  color: #a38274;
+  text-align: center;
+  font-family: "Helvetica Neue";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.circleBg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 95%;
+  height: 100%;
+  transform: translate(-50%, -50%) scale(0.65);
+  opacity: 1;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="551" height="567" viewBox="0 0 551 567" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="275.451" cy="266.834" r="266.334" stroke="%23D0B480"/><circle cx="275.45" cy="291.465" r="274.95" stroke="%23D0B480"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: all 0.8s ease;
+}
+
+@keyframes spinSlow {
+  from {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1) rotate(360deg);
+  }
+}
+
+.slider :global(.swiper-slide-active) .circleBg {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: spinSlow 45s linear infinite;
+}
+
+
+
+/* Custom navigation arrows */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navBtn:hover {
+  opacity: 0.8;
+}
+
+/* 50% of the 72px arrow overlaps the slides = 36px inside */
+.navPrev {
+  left: 0px;
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.navNext {
+  right: 0px;
+}
+
+/* Hide default Swiper arrows */
+.slider :global(.swiper-button-next),
+.slider :global(.swiper-button-prev) {
+  display: none;
+}
+
+@media (max-width: 1199px) {
+
+  .viewer,
+  .posterFrame {
+    height: 300px;
+  }
+
+  .navPrev {
+    left: -20px;
+  }
+
+  .navNext {
+    right: -20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding: 72px 0;
+  }
+
+  .container {
+    width: min(1240px, calc(100% - 32px));
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .viewer,
+  .posterFrame {
+    height: 280px;
+  }
+
+  .navBtn svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .navPrev {
+    left: -10px;
+  }
+
+  .navNext {
+    right: -10px;
+  }
+}

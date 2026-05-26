@@ -1,0 +1,153 @@
+/* ============================================
+   ZAR JEWELS — Responsive Breakpoints & Utilities
+   ============================================ */
+
+/* Breakpoints reference (mobile-first):
+   - Mobile:  < 480px    (default)
+   - Mobile+: >= 480px
+   - Tablet:  >= 768px
+   - Desktop: >= 1024px
+   - Wide:    >= 1280px
+   - Full:    >= 1440px
+   - Max:     >= 1920px
+*/
+
+/* Container utility */
+
+
+/* Visually hidden (accessible) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* resposnive css starts  */
+@media (max-width: 1601px) {
+  :root {
+    --max-width: 1400px;
+  }
+
+  /* contact page css */
+  .formHeading {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 1441px) {
+  :root {
+    --max-width: 1360px;
+  }
+
+  .fs_54 {
+    font-size: 40px;
+    line-height: 50px;
+    letter-spacing: -0.01em;
+  }
+
+  .storyGrid .fs_54 {
+    margin-bottom: 30px;
+  }
+
+  .valueIcon {
+    margin-bottom: 10px;
+  }
+
+  .fs_30 {
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+  }
+}
+
+@media (max-width: 1367px) {
+  :root {
+    --max-width: 1180px;
+  }
+}
+
+@media (max-width: 1281px) {
+  :root {
+    --max-width: 1100px;
+  }
+
+  .mt-100 {
+    margin-top: 60px;
+  }
+
+  .mb-100 {
+    margin-bottom: 60px;
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --max-width: calc(100% - 80px);
+  }
+
+  .mt-100 {
+    margin-top: 40px;
+  }
+
+  .mb-100 {
+    margin-bottom: 40px;
+  }
+
+  .formHeading {
+    margin-bottom: 10px;
+  }
+
+  .valuesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .storyGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 769px) {
+  :root {
+    --max-width: calc(100% - 40px);
+  }
+
+  body {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .mt-100 {
+    margin-top: 40px;
+  }
+
+  .mb-100 {
+    margin-bottom: 40px;
+  }
+
+  .formHeading {
+    margin-bottom: 10px;
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .bannerImage {
+    height: 250px;
+  }
+
+  .formRow {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .valuesGrid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

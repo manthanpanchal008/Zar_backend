@@ -1,0 +1,145 @@
+.overlay {
+  position: fixed;
+  top: 90px;
+  left: 0;
+  right: 0;
+  z-index: 98;
+  background-color: var(--color-white);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s ease;
+  pointer-events: none;
+  border-top: 1px solid var(--color-gold-primary);
+}
+
+.overlayOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-1px);
+  pointer-events: auto;
+}
+
+.inner {
+  display: flex;
+  border-top: 1px solid var(--color-gold-primary);
+  flex-direction: column;
+}
+
+.inner>div {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* Left sidebar - KT filter buttons */
+.sidebar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 600px));
+  justify-content: center;
+  padding-top: 10px;
+  border-bottom: 1px solid var(--color-gold-primary);
+}
+
+.sidebar .ktCard {
+  display: flex;
+  border: 1px solid transparent !important;
+  padding: 25px !important;
+  align-items: center;
+}
+
+.ktCard>div {
+  flex: 1;
+}
+
+.ktCard img {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.sidebar .ktCard.ktCardActive {
+  border: 1px solid var(--color-gold-primary) !important;
+  background: rgba(255, 215, 0, 0.07) !important;
+  box-shadow: 0 2px 12px 0 rgba(218, 165, 32, 0.08) !important;
+  z-index: 1;
+}
+
+.ktCardTitle {
+  font-size: 60px;
+  line-height: normal;
+  font-family: var(--font-heading);
+}
+
+.ktCardKt {
+  font-size: 18px;
+  line-height: normal;
+  font-family: var(--font-body);
+}
+
+.ktCardSubtitle {
+  font-size: 18px;
+  line-height: normal;
+  font-style: italic;
+  font-family: var(--font-heading);
+  color: var(--color-brown);
+}
+
+.ktCardPara {
+  font-size: 14px;
+  line-height: normal;
+  font-family: var(--font-body);
+  text-align: left;
+}
+
+/* Center grid - category cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 230px));
+  gap: 24px;
+  flex: 1;
+  margin: 0 40px;
+  padding: 0 40px;
+  justify-content: center;
+
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.categoryCard:hover {
+  opacity: 0.85;
+}
+
+.categoryImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.categoryImage img {
+  object-fit: cover;
+}
+
+.categoryName {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: var(--fw-regular);
+  color: var(--color-black);
+  line-height: 1.4;
+}
+
+@media (max-width: 1024px) {
+  .overlay {
+    display: none;
+  }
+}

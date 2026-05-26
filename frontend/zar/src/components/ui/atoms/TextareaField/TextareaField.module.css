@@ -1,0 +1,38 @@
+
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #BBB;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+  font-family: var(--font-body);
+  height: 60px;
+  resize: none;
+  outline: none;
+  color: #999;
+  transition: border-color 0.2s;
+}
+
+.textarea:focus {
+  border-color: var(--color-brown);
+}
+
+.textarea::placeholder {
+  color: #999;
+}
+
+.textareaError {
+  border-color: #d13b3b;
+}
+
+.errorText {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #d13b3b;
+  font-family: var(--font-body);
+}

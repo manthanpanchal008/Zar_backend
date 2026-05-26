@@ -1,0 +1,36 @@
+{
+  "name": "zar-jewels",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "export": "next export",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@google/model-viewer": "^4.2.0",
+    "@lottiefiles/dotlottie-react": "^0.19.1",
+    "@reduxjs/toolkit": "^2.11.2",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.38.0",
+    "html-react-parser": "^6.1.0",
+    "intl-tel-input": "^27.2.1",
+    "next": "16.2.2",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.74.0",
+    "react-redux": "^9.2.0",
+    "swiper": "^12.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.2",
+    "typescript": "^5"
+  }
+}

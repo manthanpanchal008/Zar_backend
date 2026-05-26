@@ -1,0 +1,90 @@
+/* ============================================
+   ZAR JEWELS — Design Tokens (from Figma)
+   ============================================ */
+
+:root {
+  /* ---- Brand Colors ---- */
+  --color-gold-primary: #D0B480;
+  --color-gold-dark: #8D7547;
+  --color-gold-accent: #CFB480;
+  --color-brown: #A38274;
+  --color-warm-bg: #EAE1D9;
+
+  /* ---- Neutrals ---- */
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #D9D9D9;
+  --color-gray-300: #B3B3B3;
+  --color-gray-600: #666666;
+  --color-gray-900: #111111;
+
+  /* ---- Typography ---- */
+  --font-heading: 'Times New Roman', 'Georgia', serif;
+  --font-body: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  /* --font-decorative: 'Georgia', serif; */
+
+  /* Font Sizes */
+  --fs-xs: 14px;
+  --fs-sm: 16px;
+  --fs-base: 18px;
+  --fs-md: 24px;
+  --fs-lg: 30px;
+  --fs-xl: 36px;
+  --fs-2xl: 54px;
+  --fs-3xl: 60px;
+  --fs-4xl: 72px;
+  --fs-5xl: 100px;
+  --fs-decorative: 128px;
+
+  /* Line Heights */
+  --lh-tight: 1.1;
+  --lh-snug: 1.2;
+  --lh-normal: 1.44;
+  --lh-relaxed: 1.6;
+  --lh-loose: 1.78;
+
+  /* Font Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 500;
+  --fw-bold: 700;
+
+  /* ---- Spacing (8px grid) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 30px;
+  --space-8: 40px;
+  --space-9: 50px;
+  --space-10: 60px;
+  --space-11: 80px;
+  --space-12: 100px;
+  --space-13: 120px;
+  --space-14: 160px;
+
+  /* ---- Layout ---- */
+  --max-width: 1600px;
+  --container-padding: 160px;
+  --section-gap: 100px;
+
+  /* ---- Border Radius ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* ---- Transitions ---- */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+}

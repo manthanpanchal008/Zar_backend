@@ -1,0 +1,28 @@
+.tabWrapper {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.activeTab {
+  background: #CFB480;
+  color: #fff;
+  border: 1px solid #CFB480;
+  padding: 8px 24px;
+  cursor: pointer;
+}
+
+.inactiveTab {
+  color: #000;
+  border: 1px solid #CFB480;
+  padding: 8px 24px;
+  cursor: pointer;
+}
+
+/*------------------------ RESPONSIVE ------------------------*/
+@media (max-width: 992px) {
+  .tabWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

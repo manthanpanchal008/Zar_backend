@@ -1,0 +1,119 @@
+.mx-auto {
+  margin-inline: auto;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 50px;
+  column-gap: 30px;
+  margin: 60px 0;
+}
+
+.benefitCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: start;
+}
+
+.benefitTitle {
+  color: #A38274;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.benefitSubtitle {
+  color: #666;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+  margin: 100px 0;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.inputGroup {
+  flex: 1;
+}
+
+@media (max-width: 992px) {
+  .benefitsGrid {
+    display: grid;
+    /* Create a horizontal row instead of wrapping */
+    grid-auto-columns: 30vw;
+    grid-auto-flow: column;
+    grid-template-columns: none !important;
+    /* Enable horizontal scrolling */
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+
+    /* Snap Container Logic */
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    /* Hide scrollbar for a cleaner look (optional) */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    padding-bottom: 20px;
+    /* Space for shadow if any */
+  }
+
+  .benefitsGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .benefitCard {
+    /* Snap Alignment Logic */
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    gap: 10px;
+  }
+
+  .benefitTitle {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 769px) {
+  .grid {
+    margin: 100px 0;
+  }
+
+  .benefitsGrid {
+    grid-auto-columns: 60vw;
+  }
+
+  .formRow {
+    flex-direction: column;
+  }
+}

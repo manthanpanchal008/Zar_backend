@@ -1,0 +1,21 @@
+.bulletPoint {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background-color: var(--color-gold-primary);
+}
+
+.text {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-regular);
+  line-height: 32px;
+  color: var(--color-gray-600);
+}

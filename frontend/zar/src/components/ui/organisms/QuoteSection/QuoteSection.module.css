@@ -1,0 +1,134 @@
+.section {
+  position: relative;
+  width: 100%;
+}
+
+.background {
+  position: relative;
+  width: 100%;
+  min-height: 650px;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+}
+
+.bgImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.85);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.quoteWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 0 60px;
+}
+
+.quoteMarkLeft,
+.quoteMarkRight {
+  font-family: var(--font-decorative);
+  font-size: var(--fs-decorative);
+  line-height: 80px;
+  color: var(--color-gold-accent);
+}
+
+.quoteText {
+  font-family: var(--font-heading);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-semibold);
+  line-height: 66px;
+  color: var(--color-gold-accent);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.statValue {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: var(--fw-semibold);
+  line-height: 56px;
+  color: var(--color-gold-accent);
+}
+
+.statLabel {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-regular);
+  line-height: 24px;
+  color: var(--color-gold-accent);
+}
+
+.statDescription {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 26px;
+  color: var(--color-white);
+  opacity: 0.7;
+}
+
+@media (min-width: 768px) {
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 162px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quoteText {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .quoteMarkLeft,
+  .quoteMarkRight {
+    font-size: 60px;
+    line-height: 50px;
+  }
+
+  .quoteWrapper {
+    padding: 0 20px;
+  }
+
+  .statValue {
+    font-size: 36px;
+    line-height: 44px;
+  }
+}

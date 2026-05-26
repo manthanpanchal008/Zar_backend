@@ -1,0 +1,39 @@
+
+.input {
+    height: 60px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 14px 14px 14px 90px;
+    color: #999;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    font-family: var(--font-body);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.inputError {
+    border-color: #d13b3b;
+}
+
+.errorText {
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #d13b3b;
+    font-family: var(--font-body);
+}
+
+
+/* Flag button container */
+.fieldGroup :global(.iti__flag-container) {
+    border-right: 1px solid #cccccc;
+}
+
+.fieldGroup :global(.iti__selected-dial-code) {
+    font-size: 14px;
+    color: #999;
+}

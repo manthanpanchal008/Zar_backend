@@ -1,0 +1,231 @@
+/* ── Heading Section ── */
+/* .headerSection {
+  margin-bottom: 32px;
+} */
+
+.heading {
+    font-family: var(--font-heading);
+    color: var(--color-brown);
+    font-size: 72px;
+    line-height: 80px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.resultCount {
+    color: var(--color-brown);
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 80px;
+    text-transform: uppercase;
+}
+
+
+/* ── Filter & Sort Toolbar ── */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 50px 0 8px;
+}
+
+.filterBtn {
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ddd;
+    background: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: color var(--transition-fast);
+}
+
+.filterBtn:hover {
+    color: var(--color-gold-primary);
+}
+
+.sortWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+}
+
+.sortLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.sortSelect {
+    font-size: 18px;
+    color: var(--color-black);
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* ── Filter Panel ── */
+.filterPanel {
+    display: flex;
+    gap: 40px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-gray-200);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filterGroupTitle {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--color-black);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+
+.filterOption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    color: var(--color-gray-600);
+    cursor: pointer;
+}
+
+.filterOption input[type='checkbox'] {
+    accent-color: var(--color-gold-primary);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+/* ── Product Grid ── */
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    padding-top: 30px;
+}
+
+/* ── Product Card ── */
+.productCard {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.productCard:focus-visible {
+    outline: 2px solid var(--color-gold-primary);
+    outline-offset: 3px;
+}
+
+.productImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--color-gray-100);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.productImage {
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.productCard:hover .productImage {
+    transform: scale(1.04);
+}
+
+.productContent {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.productTitle {
+    color: #000;
+    font-family: "Helvetica Neue";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px;
+    /* 106.667% */
+}
+
+.productDesc {
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
+    color: var(--color-gray-600);
+    line-height: var(--lh-relaxed);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.enquireBtn {
+    flex: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+    .productGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .filterPanel {
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .productGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .toolbar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .productGrid {
+        grid-template-columns: 1fr;
+    }
+}

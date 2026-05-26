@@ -1,0 +1,153 @@
+.section {
+  position: relative;
+  padding: 100px 20px 120px;
+  overflow: hidden;
+  color: var(--color-white)!important;
+}
+
+.backgroundImage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.backgroundImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 1;
+} */
+
+.inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+  line-height: 66px;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+
+
+/* Event card */
+.eventCard {
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+  /* background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1); */
+  overflow: hidden;
+}
+
+.eventImage {
+  position: relative;
+  width: 100%;
+  /* aspect-ratio: 560 / 380; */
+  /* overflow: hidden; */
+  flex-shrink: 0;
+}
+
+.eventImage img {
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; */
+}
+
+.eventDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 30px;
+}
+
+.eventMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-white);
+}
+
+.metaIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--color-gold-primary);
+}
+
+
+@media (min-width: 1024px) {
+  .section {
+    padding: 100px 60px 120px;
+  }
+
+  .eventCard {
+    flex-direction: row;
+  }
+
+  .eventImage {
+    flex: 0 0 50%;
+    aspect-ratio: auto;
+  }
+
+  .eventDetails {
+    flex: 1;
+    padding: 50px 60px;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .eventTitle {
+    font-size: var(--fs-lg);
+    line-height: 38px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    padding: 100px 0 120px;
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding: 60px 20px;
+  }
+
+  .heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  .eventDetails {
+    padding: 30px 20px;
+  }
+}

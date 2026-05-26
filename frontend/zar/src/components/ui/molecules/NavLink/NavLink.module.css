@@ -1,0 +1,39 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.navLink {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: 24px;
+  color: var(--color-gray-600);
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navLink:hover {
+  color: var(--color-black);
+}
+
+.active {
+  color: var(--color-black);
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+}
+
+.chevron svg {
+  width: 11px;
+  height: 6px;
+  transition: transform var(--transition-fast);
+}
+
+.navLink:hover .chevron svg {
+  transform: rotate(180deg);
+}

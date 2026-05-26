@@ -1,0 +1,49 @@
+.sectionTitle {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+  line-height: 66px;
+  color: var(--color-brown);
+}
+
+.headingWhite {
+  color: var(--color-white);
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: 26px;
+  color: var(--color-gray-600);
+  max-width: 1076px;
+}
+
+.subtitleWhite {
+  color: var(--color-white);
+}
+
+.subtitleLarge {
+  font-size: var(--fs-3xl);
+  line-height: 66px;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  .subtitleLarge {
+    font-size: 36px;
+    line-height: 44px;
+  }
+}

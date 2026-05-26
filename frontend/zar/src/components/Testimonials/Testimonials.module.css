@@ -1,0 +1,41 @@
+/* Testimonial grid and card styles */
+.testimonialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 30px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.testimonialCard {
+  border: 1px solid #CFB480;
+  padding: 35px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonialText {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.testimonialName {
+  font-size: 20px;
+  color: #000;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.testimonialDesignation {
+  font-size: 16px;
+  color: #666;
+  line-height: 20px;
+}
+
+.text_testi_slider {
+  margin-top: 40px;
+}

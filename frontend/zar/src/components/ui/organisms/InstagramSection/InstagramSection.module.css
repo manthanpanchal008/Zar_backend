@@ -1,0 +1,138 @@
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  text-align: center;
+}
+
+.instagramIcon {
+  width: 72px;
+  height: 72px;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+  line-height: 66px;
+  color: var(--color-brown);
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: var(--fs-base);
+  line-height: 26px;
+  color: var(--color-gray-600);
+}
+
+/* Slider */
+.slider {
+  width: 100%;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.slide {
+  flex-shrink: 0;
+  padding: 0 11.5px;
+  box-sizing: border-box;
+}
+
+.slideLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1036px;
+}
+
+.navButton {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1.5px solid var(--color-gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-gold-primary);
+  transition: background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.navButton:hover:not(:disabled) {
+  background-color: var(--color-gold-primary);
+  color: #fff;
+}
+
+.navButton svg {
+  width: 7px;
+  height: 14px;
+}
+
+.navDisabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.progressBar {
+  flex: 1;
+  height: 2px;
+  background-color: var(--color-gold-primary);
+  border-radius: 20px;
+  position: relative;
+}
+
+.progressFill {
+  position: absolute;
+  top: -1px;
+  height: 4px;
+  background-color: var(--color-gold-dark);
+  border-radius: 20px;
+  transition: left 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 20px;
+  }
+
+  .heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  .slide {
+    padding: 0 8px;
+  }
+}
