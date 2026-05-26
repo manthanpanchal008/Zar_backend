@@ -89,3 +89,24 @@ export type Clientele = {
   image_url?: string | null;
   country: string;
 };
+
+export type Testimonial = {
+  id: number;
+  name: string;
+  comment: string;
+  position?: string | null;
+  companyName?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type Career = {
+  id: number;
+  position: string;
+  experience: string;
+  location: string;
+  jobDescription: string;
+  created_at?: string;
+  updated_at?: string;
+};
+

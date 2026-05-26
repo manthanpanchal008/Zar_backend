@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Coins, Home, Layers, LogOut, Sparkles, UserCheck, Users, Hammer } from "lucide-react";
+import { Calendar, Coins, Home, Layers, LogOut, Sparkles, UserCheck, Users, Hammer, MessageSquare, Briefcase } from "lucide-react";
 import { clearAuth } from "@/lib/auth";
 import type { AdminUser } from "@/types";
 
@@ -14,6 +14,8 @@ const items = [
   { href: "/makingtype", label: "MakingType", icon: Hammer },
   { href: "/products", label: "Products", icon: Sparkles },
   { href: "/clientele", label: "Clientele", icon: UserCheck },
+  { href: "/testimonials", label: "Testimonials", icon: MessageSquare },
+  { href: "/careers", label: "Careers", icon: Briefcase },
   { href: "/users", label: "Users", icon: Users, adminOnly: true },
 ];
 

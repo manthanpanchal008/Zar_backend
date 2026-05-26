@@ -71,7 +71,7 @@ export function EventForm({ event }: { event?: Event }) {
   }
 
   return (
-    <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit(onSubmit)}>
+    <form className="grid gap-4 grid-cols-1" onSubmit={handleSubmit(onSubmit)}>
       {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 md:col-span-2">{error}</div> : null}
 
       <label className="md:col-span-2">

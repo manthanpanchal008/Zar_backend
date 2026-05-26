@@ -1,4 +1,4 @@
-﻿-- Create the database for Zar jewels backend
+-- Create the database for Zar jewels backend
 CREATE DATABASE IF NOT EXISTS zar_jeweller;
 USE zar_jeweller;
 
@@ -98,3 +98,26 @@ CREATE TABLE `clientele` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Testimonials table
+CREATE TABLE IF NOT EXISTS `testimonials` (
+  `id` BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `comment` TEXT NOT NULL,
+  `position` VARCHAR(255) DEFAULT NULL,
+  `companyName` VARCHAR(255) DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Careers table
+CREATE TABLE IF NOT EXISTS `careers` (
+  `id` BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `position` VARCHAR(255) NOT NULL,
+  `experience` VARCHAR(255) NOT NULL,
+  `location` VARCHAR(255) NOT NULL,
+  `jobDescription` TEXT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

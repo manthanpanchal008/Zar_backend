@@ -7,6 +7,8 @@ const makingTypeController = require('../controllers/admin/makingTypeController'
 const userController = require('../controllers/admin/userController');
 const eventController = require('../controllers/admin/eventController');
 const clienteleController = require('../controllers/admin/clienteleController');
+const testimonialController = require('../controllers/admin/testimonialController');
+const careerController = require('../controllers/admin/careerController');
 const { requireJwtAuth, requireJwtRole } = require('../middleware/auth');
 const { imageUpload, handleMulterError } = require('../middleware/upload');
 const { listProducts } = require('../models/productModel');
@@ -138,6 +140,20 @@ router.delete('/api/admin/users/:id', requireJwtAuth, requireJwtRole('admin'), u
 router.get('/api/admin/orders', requireJwtAuth, (_req, res) => {
   return res.json({ success: true, items: [] });
 });
+
+// Testimonials CRUD routes
+router.get('/api/testimonials', testimonialController.index);
+router.get('/api/testimonials/:id', testimonialController.show);
+router.post('/api/testimonials', requireJwtAuth, requireJwtRole('admin'), testimonialController.store);
+router.put('/api/testimonials/:id', requireJwtAuth, requireJwtRole('admin'), testimonialController.update);
+router.delete('/api/testimonials/:id', requireJwtAuth, requireJwtRole('admin'), testimonialController.destroy);
+
+// Careers CRUD routes
+router.get('/api/careers', careerController.index);
+router.get('/api/careers/:id', careerController.show);
+router.post('/api/careers', requireJwtAuth, requireJwtRole('admin'), careerController.store);
+router.put('/api/careers/:id', requireJwtAuth, requireJwtRole('admin'), careerController.update);
+router.delete('/api/careers/:id', requireJwtAuth, requireJwtRole('admin'), careerController.destroy);
 
 router.use(handleMulterError);
 

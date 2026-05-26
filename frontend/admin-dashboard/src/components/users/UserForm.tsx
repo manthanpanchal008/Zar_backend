@@ -56,7 +56,7 @@ export function UserForm({ editUser }: { editUser?: AdminUser }) {
   }
 
   return (
-    <form className="space-y-4 max-w-lg" onSubmit={handleSubmit(onSubmit)}>
+    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
       {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
 
       <label className="block">
