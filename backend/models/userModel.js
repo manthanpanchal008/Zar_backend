@@ -2,7 +2,7 @@ const pool = require('../config/db');
 
 async function findUserByEmail(email) {
   const [rows] = await pool.execute(
-    'SELECT id, name, email, password, role FROM users WHERE email = ?',
+    'SELECT id, name, email, password, role, reset_otp, reset_otp_expiry, reset_otp_attempts, reset_otp_last_sent, reset_token FROM users WHERE email = ?',
     [email]
   );
   return rows[0] || null;
@@ -57,6 +57,27 @@ async function emailExistsForOtherId(email, excludeId) {
   return rows.length > 0;
 }
 
+async function updateUserOtp(email, { reset_otp, reset_otp_expiry, reset_otp_attempts, reset_otp_last_sent }) {
+  await pool.execute(
+    'UPDATE users SET reset_otp = ?, reset_otp_expiry = ?, reset_otp_attempts = ?, reset_otp_last_sent = ? WHERE email = ?',
+    [reset_otp, reset_otp_expiry, reset_otp_attempts, reset_otp_last_sent, email]
+  );
+}
+
+async function updateUserResetToken(email, reset_token) {
+  await pool.execute(
+    'UPDATE users SET reset_token = ? WHERE email = ?',
+    [reset_token, email]
+  );
+}
+
+async function resetUserPassword(email, hashedPassword) {
+  await pool.execute(
+    'UPDATE users SET password = ?, reset_otp = NULL, reset_otp_expiry = NULL, reset_otp_attempts = 0, reset_token = NULL WHERE email = ?',
+    [hashedPassword, email]
+  );
+}
+
 module.exports = {
   findUserByEmail,
   findUserById,
@@ -65,5 +86,8 @@ module.exports = {
   updateUserById,
   deleteUserById,
   emailExistsForOtherId,
+  updateUserOtp,
+  updateUserResetToken,
+  resetUserPassword,
 };
 

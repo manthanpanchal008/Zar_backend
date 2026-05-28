@@ -75,6 +75,11 @@ async function ensureSchema() {
   `);
 
   await addColumnIfNotExists(connection, 'users', 'role', "ENUM('admin', 'staff') NOT NULL DEFAULT 'staff' AFTER password");
+  await addColumnIfNotExists(connection, 'users', 'reset_otp', "VARCHAR(6) NULL DEFAULT NULL");
+  await addColumnIfNotExists(connection, 'users', 'reset_otp_expiry', "TIMESTAMP NULL DEFAULT NULL");
+  await addColumnIfNotExists(connection, 'users', 'reset_otp_attempts', "INT DEFAULT 0");
+  await addColumnIfNotExists(connection, 'users', 'reset_otp_last_sent', "TIMESTAMP NULL DEFAULT NULL");
+  await addColumnIfNotExists(connection, 'users', 'reset_token', "VARCHAR(255) NULL DEFAULT NULL");
 
   await connection.query(`
     UPDATE users

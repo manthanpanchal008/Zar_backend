@@ -23,4 +23,8 @@ module.exports = {
   JWT_SECRET: process.env.JWT_SECRET || process.env.SESSION_SECRET || 'your-jwt-secret-change-in-production',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1d',
   CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  SMTP_HOST: process.env.SMTP_HOST || '',
+  SMTP_PORT: Number(process.env.SMTP_PORT || 587),
+  SMTP_USER: process.env.SMTP_USER || '',
+  SMTP_PASS: process.env.SMTP_PASS || '',
 };

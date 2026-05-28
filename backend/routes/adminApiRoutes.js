@@ -33,6 +33,9 @@ const manufacturingUpload = imageUpload('manufacturing', { files: 1, fallbackNam
 router.post('/api/auth/login', authController.login);
 router.post('/api/auth/logout', requireJwtAuth, authController.logout);
 router.get('/api/auth/me', requireJwtAuth, authController.me);
+router.post('/api/auth/forgot-password', authController.forgotPassword);
+router.post('/api/auth/verify-otp', authController.verifyOtp);
+router.post('/api/auth/reset-password', authController.resetPassword);
 
 router.get('/api/admin/dashboard', requireJwtAuth, async (_req, res) => {
   try {
