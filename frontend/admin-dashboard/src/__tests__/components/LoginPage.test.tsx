@@ -42,4 +42,11 @@ describe("Login page", () => {
       password: "secret123",
     });
   });
+
+  test("renders login cover banner image", () => {
+    render(<LoginPage />);
+    const bannerImg = screen.getByAltText(/login banner/i);
+    expect(bannerImg).toBeInTheDocument();
+    expect(bannerImg).toHaveAttribute("src", "/login-image.jpg");
+  });
 });

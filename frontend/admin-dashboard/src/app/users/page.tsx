@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
+import { ViewModal } from "@/components/common/ViewModal";
 import { api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import type { AdminUser } from "@/types";
@@ -13,6 +14,7 @@ import type { AdminUser } from "@/types";
 export default function UsersPage() {
   const { user: currentUser } = useAuthGuard();
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -82,6 +84,9 @@ export default function UsersPage() {
         const isSelf = String(item.id) === String(currentUser?.id);
         return (
           <div className="flex gap-2">
+            <Button variant="secondary" className="px-3 py-2" onClick={() => setSelectedUser(item)}>
+              View
+            </Button>
             <Link
               className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
               href={`/users/${item.id}`}
@@ -93,7 +98,7 @@ export default function UsersPage() {
                 You
               </span>
             ) : (
-              <Button variant="danger" onClick={() => deleteUser(item.id)}>
+              <Button variant="danger" className="px-3 py-2" onClick={() => deleteUser(item.id)}>
                 Delete
               </Button>
             )}
@@ -131,6 +136,41 @@ export default function UsersPage() {
           )}
         </CardBody>
       </Card>
+
+      <ViewModal
+        isOpen={!!selectedUser}
+        onClose={() => setSelectedUser(null)}
+        title="User Account Details"
+      >
+        {selectedUser && (
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">User ID</h4>
+              <p className="mt-1 text-sm font-mono text-black">{selectedUser.id}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Full Name</h4>
+              <p className="mt-1 text-sm font-semibold text-black">{selectedUser.name}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Email Address</h4>
+              <p className="mt-1 text-sm text-black">{selectedUser.email}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Role / Permissions</h4>
+              <span
+                className={`mt-1 inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase ${
+                  selectedUser.role === "admin"
+                    ? "bg-[#D0B480]/20 text-[#a38274] border border-[#D0B480]/30"
+                    : "bg-gray-100 text-gray-700"
+                }`}
+              >
+                {selectedUser.role}
+              </span>
+            </div>
+          </div>
+        )}
+      </ViewModal>
     </AdminLayout>
   );
 }

@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
+import { ViewModal } from "@/components/common/ViewModal";
 import { api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import type { Career } from "@/types";
@@ -13,6 +14,7 @@ import type { Career } from "@/types";
 export default function CareersPage() {
   const { user } = useAuthGuard();
   const [careers, setCareers] = useState<Career[]>([]);
+  const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -70,27 +72,30 @@ export default function CareersPage() {
         return <span className="text-zar-muted line-clamp-2 max-w-xs">{cleanText || "-"}</span>;
       },
     },
-    ...(isAdmin
-      ? [
-          {
-            key: "actions",
-            label: "Actions",
-            render: (item: Career) => (
-              <div className="flex gap-2">
-                <Link
-                  className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
-                  href={`/careers/${item.id}/edit`}
-                >
-                  Edit
-                </Link>
-                <Button variant="danger" onClick={() => deleteCareer(item.id)}>
-                  Delete
-                </Button>
-              </div>
-            ),
-          },
-        ]
-      : []),
+    {
+      key: "actions",
+      label: "Actions",
+      render: (item: Career) => (
+        <div className="flex gap-2">
+          <Button variant="secondary" className="px-3 py-2" onClick={() => setSelectedCareer(item)}>
+            View
+          </Button>
+          {isAdmin && (
+            <>
+              <Link
+                className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
+                href={`/careers/${item.id}/edit`}
+              >
+                Edit
+              </Link>
+              <Button variant="danger" className="px-3 py-2" onClick={() => deleteCareer(item.id)}>
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -123,6 +128,36 @@ export default function CareersPage() {
           )}
         </CardBody>
       </Card>
+
+      <ViewModal
+        isOpen={!!selectedCareer}
+        onClose={() => setSelectedCareer(null)}
+        title="Career Details"
+      >
+        {selectedCareer && (
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Position</h4>
+              <p className="mt-1 text-sm font-medium text-black">{selectedCareer.position}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Experience</h4>
+              <p className="mt-1 text-sm font-medium text-black">{selectedCareer.experience}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Location</h4>
+              <p className="mt-1 text-sm font-medium text-black">{selectedCareer.location}</p>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Job Description</h4>
+              <div
+                className="mt-1 text-sm text-black rich-editor-content prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ __html: selectedCareer.jobDescription }}
+              />
+            </div>
+          </div>
+        )}
+      </ViewModal>
     </AdminLayout>
   );
 }

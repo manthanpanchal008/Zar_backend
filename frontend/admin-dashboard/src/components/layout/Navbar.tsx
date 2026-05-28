@@ -4,8 +4,17 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown, LogOut, Menu, User as UserIcon } from "lucide-react";
 import { clearAuth } from "@/lib/auth";
 import type { AdminUser } from "@/types";
+import toast from "react-hot-toast";
 
-export function Navbar({ title, user }: { title: string; user: AdminUser | null }) {
+export function Navbar({ 
+  title, 
+  user, 
+  onOpenSidebar 
+}: { 
+  title: string; 
+  user: AdminUser | null; 
+  onOpenSidebar: () => void; 
+}) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -21,14 +30,21 @@ export function Navbar({ title, user }: { title: string; user: AdminUser | null 
 
   function handleLogout() {
     clearAuth();
-    window.location.assign("/login");
+    toast.success("Logged out successfully.");
+    setTimeout(() => {
+      window.location.assign("/Zar_backend/login");
+    }, 800);
   }
 
   return (
     <header className="sticky top-0 z-20 border-b border-[#eee7dd] bg-white/95 backdrop-blur">
       <div className="flex min-h-20 items-center justify-between gap-4 px-4 lg:px-8">
         <div className="flex items-center gap-3">
-          <button className="rounded-lg border border-[#eee7dd] p-2 text-zar-muted lg:hidden" aria-label="Open menu">
+          <button 
+            onClick={onOpenSidebar}
+            className="rounded-lg border border-[#eee7dd] p-2 text-zar-muted lg:hidden hover:bg-zar-bg transition" 
+            aria-label="Open menu"
+          >
             <Menu size={20} />
           </button>
           <h1 className="text-xl font-bold text-zar-title md:text-2xl">{title}</h1>
@@ -40,15 +56,14 @@ export function Navbar({ title, user }: { title: string; user: AdminUser | null 
             className="flex items-center gap-2 rounded-lg border border-[#eee7dd] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-bg transition"
           >
             <UserIcon size={18} className="text-zar-muted" />
-            <span>{user?.name || "Admin"}</span>
+            <span className="hidden sm:inline truncate max-w-[100px]">{user?.name || "Admin"}</span>
             <ChevronDown size={14} className="text-zar-muted" />
           </button>
 
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-56 rounded-lg border border-[#eee7dd] bg-white p-2 shadow-panel z-50">
               <div className="px-3 py-2">
-                <p className="text-xs text-zar-muted font-medium">Logged in as</p>
-                <p className="text-sm font-bold text-black truncate">{user?.email || "admin@zarjewels.com"}</p>
+                               <p className="text-sm font-bold text-black truncate">{user?.email || "admin@zarjewels.com"}</p>
                 <p className="text-xs text-zar-gold capitalize font-semibold mt-0.5">{user?.role || "Staff"}</p>
               </div>
               <hr className="my-1 border-[#eee7dd]" />

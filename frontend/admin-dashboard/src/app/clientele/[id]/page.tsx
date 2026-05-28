@@ -9,17 +9,32 @@ import { api } from "@/lib/api";
 import type { Clientele } from "@/types";
 
 export default function EditClientelePage() {
-  const params = useParams<{ id: string }>();
+  const { id } = useParams();
   const [clientele, setClientele] = useState<Clientele | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (params.id) {
-      api.get(`/api/admin/clientele/${params.id}`)
-        .then((response) => setClientele(response.data.clientele))
-        .catch(() => setError("Failed to load clientele details."));
-    }
-  }, [params.id]);
+    if (!id) return;
+    setLoading(true);
+    api.get(`/api/admin/clientele/${id}`)
+      .then((response) => {
+        setClientele(response.data.clientele);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load clientele details.");
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <AdminLayout title="Edit Clientele">
+        <div className="text-center py-8 text-zar-muted">Loading clientele details...</div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title="Edit Clientele">
@@ -33,7 +48,7 @@ export default function EditClientelePage() {
           ) : clientele ? (
             <ClienteleForm clientele={clientele} />
           ) : (
-            <p className="text-zar-muted">Loading clientele details...</p>
+            <p className="text-zar-muted">Clientele not found.</p>
           )}
         </CardBody>
       </Card>

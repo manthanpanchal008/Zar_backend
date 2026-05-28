@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
+import { ViewModal } from "@/components/common/ViewModal";
 import { API_BASE_URL, api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import type { GoldType } from "@/types";
@@ -18,6 +19,7 @@ function imageSrc(path: string) {
 export default function GoldTypesPage() {
   const { user } = useAuthGuard();
   const [items, setItems] = useState<GoldType[]>([]);
+  const [selectedGoldType, setSelectedGoldType] = useState<GoldType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -106,27 +108,30 @@ export default function GoldTypesPage() {
         </button>
       ),
     },
-    ...(isAdmin
-      ? [
-          {
-            key: "actions",
-            label: "Actions",
-            render: (item: GoldType) => (
-              <div className="flex gap-2">
-                <Link
-                  className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
-                  href={`/goldtype/${item.id}`}
-                >
-                  Edit
-                </Link>
-                <Button variant="danger" onClick={() => deleteGoldType(item.id)}>
-                  Delete
-                </Button>
-              </div>
-            ),
-          },
-        ]
-      : []),
+    {
+      key: "actions",
+      label: "Actions",
+      render: (item: GoldType) => (
+        <div className="flex gap-2">
+          <Button variant="secondary" className="px-3 py-2" onClick={() => setSelectedGoldType(item)}>
+            View
+          </Button>
+          {isAdmin && (
+            <>
+              <Link
+                className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
+                href={`/goldtype/${item.id}`}
+              >
+                Edit
+              </Link>
+              <Button variant="danger" className="px-3 py-2" onClick={() => deleteGoldType(item.id)}>
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
+      ),
+    },
   ];
 
   const filters = [
@@ -171,6 +176,60 @@ export default function GoldTypesPage() {
           )}
         </CardBody>
       </Card>
+
+      <ViewModal
+        isOpen={!!selectedGoldType}
+        onClose={() => setSelectedGoldType(null)}
+        title="Gold Type Details"
+      >
+        {selectedGoldType && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Gold Type Image */}
+              <div className="flex-shrink-0">
+                <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider mb-2">Image</h4>
+                {selectedGoldType.image_url || selectedGoldType.image ? (
+                  <div className="h-40 w-40 rounded-xl overflow-hidden border border-[#eee7dd] bg-gray-50 flex items-center justify-center">
+                    <img
+                      alt={selectedGoldType.name}
+                      src={imageSrc(selectedGoldType.image_url || `/uploads/goldtypes/${selectedGoldType.image}`)}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-40 w-40 rounded-xl border border-dashed border-[#eee7dd] bg-[#fdfcfa] flex items-center justify-center text-zar-muted">
+                    No Image
+                  </div>
+                )}
+              </div>
+
+              {/* Gold Type Info */}
+              <div className="flex-1 space-y-4">
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Name</h4>
+                  <p className="mt-1 text-base font-bold text-black">{selectedGoldType.name}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Purity (%)</h4>
+                  <p className="mt-1 text-sm font-medium text-black">{selectedGoldType.purity}%</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Status</h4>
+                  <span
+                    className={`mt-1 inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                      selectedGoldType.isActive
+                        ? "bg-green-50 text-green-700 border-green-200"
+                        : "bg-red-50 text-red-700 border-red-200"
+                    }`}
+                  >
+                    {selectedGoldType.isActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </ViewModal>
     </AdminLayout>
   );
 }

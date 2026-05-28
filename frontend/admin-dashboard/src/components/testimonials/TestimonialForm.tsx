@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import toast from "react-hot-toast";
 import { api } from "@/lib/api";
 import type { Testimonial } from "@/types";
 
@@ -21,6 +24,7 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<TestimonialFormValues>({
     defaultValues: {
@@ -30,6 +34,10 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
       companyName: testimonial?.companyName || "",
     },
   });
+
+  const onInvalid = () => {
+    toast.error("Please fill in all required fields.");
+  };
 
   async function onSubmit(values: TestimonialFormValues) {
     setError("");
@@ -53,55 +61,73 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
   }
 
   return (
-    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
-      {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="w-full"
+    >
+      <form className="grid gap-6 grid-cols-1 md:grid-cols-2" onSubmit={handleSubmit(onSubmit, onInvalid)}>
+        {error ? (
+          <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 md:col-span-2">
+            {error}
+          </div>
+        ) : null}
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Client Name *</span>
-         <input
-           className="form-input"
-           placeholder="e.g. John Doe"
-           {...register("name", { required: "Client name is required" })}
-         />
-         {errors.name ? <span className="text-xs text-red-600">{errors.name.message}</span> : null}
-      </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Client Name *</span>
+          <input
+            className="form-input"
+            placeholder="e.g. John Doe"
+            {...register("name", { required: "Client name is required" })}
+          />
+          {errors.name ? <span className="text-xs text-red-600">{errors.name.message}</span> : null}
+        </label>
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Position</span>
-         <input
-           className="form-input"
-           placeholder="e.g. Founder & CEO"
-           {...register("position")}
-         />
-      </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Position</span>
+          <input
+            className="form-input"
+            placeholder="e.g. Founder & CEO"
+            {...register("position")}
+          />
+        </label>
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Company Name</span>
-         <input
-           className="form-input"
-           placeholder="e.g. Acme Corp"
-           {...register("companyName")}
-         />
-      </label>
+        <label className="block md:col-span-2 lg:col-span-1">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Company Name</span>
+          <input
+            className="form-input"
+            placeholder="e.g. Acme Corp"
+            {...register("companyName")}
+          />
+        </label>
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Comment *</span>
-         <textarea
-           className="form-input min-h-24"
-           placeholder="What did they say about our brand?"
-           {...register("comment", { required: "Comment is required" })}
-         />
-         {errors.comment ? <span className="text-xs text-red-600">{errors.comment.message}</span> : null}
-      </label>
+        <div className="block md:col-span-2">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Comment *</span>
+          <Controller
+            control={control}
+            name="comment"
+            rules={{ required: "Comment is required" }}
+            render={({ field }) => (
+              <RichTextEditor
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="What did they say about our brand?"
+              />
+            )}
+          />
+          {errors.comment ? <span className="text-xs text-red-600">{errors.comment.message}</span> : null}
+        </div>
 
-      <div className="flex gap-2 pt-2">
-        <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Saving..." : "Save Testimonial"}
-        </Button>
-        <Button type="button" variant="secondary" onClick={() => router.push("/testimonials")}>
-          Cancel
-        </Button>
-      </div>
-    </form>
+        <div className="flex gap-2 pt-2 md:col-span-2">
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? "Saving..." : "Save Testimonial"}
+          </Button>
+          <Button type="button" variant="secondary" onClick={() => router.push("/testimonials")}>
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </motion.div>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/Button";
 import { API_BASE_URL, api, uploadConfig } from "@/lib/api";
 import type { Clientele } from "@/types";
@@ -22,6 +23,7 @@ export function ClienteleForm({ clientele }: { clientele?: Clientele }) {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ClienteleFormValues>({
     defaultValues: {
@@ -29,6 +31,13 @@ export function ClienteleForm({ clientele }: { clientele?: Clientele }) {
       country: clientele?.country || "India",
     },
   });
+
+  const watchImage = watch("clientele_image");
+  const hasNewImage = watchImage && watchImage.length > 0;
+
+  const onInvalid = () => {
+    toast.error("Please fill in all required fields.");
+  };
 
   async function onSubmit(values: ClienteleFormValues) {
     setError("");
@@ -55,7 +64,7 @@ export function ClienteleForm({ clientele }: { clientele?: Clientele }) {
   const imageUrl = clientele?.image_url || (clientele?.clientele_image ? `/uploads/clientele/${clientele.clientele_image}` : null);
 
   return (
-    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
+    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit, onInvalid)}>
       {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
 
       <label className="block">
@@ -91,7 +100,7 @@ export function ClienteleForm({ clientele }: { clientele?: Clientele }) {
         />
       </div>
 
-      {imageUrl && (
+      {imageUrl && !hasNewImage && (
         <div className="space-y-1">
           <span className="block text-xs font-semibold text-zar-muted">Current Image:</span>
           <img

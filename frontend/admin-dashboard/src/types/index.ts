@@ -13,11 +13,10 @@ export type Product = {
   category_name?: string | null;
   gold_type_id: number | null;
   gold_type_name?: string | null;
-  making_type_id: number | null;
-  making_type_name?: string | null;
+  collection_type_id: number | null;
+  collection_type_name?: string | null;
   sku: string | null;
   title: string;
-  collection_name: string;
   short_description?: string | null;
   number_of_pcs?: number | null;
   display_finish?: string | null;
@@ -60,9 +59,19 @@ export type CategoryNew = {
   isActive: boolean;
 };
 
-export type MakingType = {
+export type CollectionType = {
   id: number;
   name: string;
+  image?: string | null;
+  image_url?: string | null;
+  is_active: number;
+  isActive: boolean;
+};
+
+export type Manufacturing = {
+  id: number;
+  name: string;
+  description?: string | null;
   image?: string | null;
   image_url?: string | null;
   is_active: number;

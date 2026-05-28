@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import toast from "react-hot-toast";
 import { api } from "@/lib/api";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
 import type { Career } from "@/types";
@@ -33,6 +35,10 @@ export function CareerForm({ career }: { career?: Career }) {
     },
   });
 
+  const onInvalid = () => {
+    toast.error("Please fill in all required fields.");
+  };
+
   async function onSubmit(values: CareerFormValues) {
     setError("");
     const payload = {
@@ -55,64 +61,75 @@ export function CareerForm({ career }: { career?: Career }) {
   }
 
   return (
-    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
-      {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="w-full"
+    >
+      <form className="grid gap-6 grid-cols-1 md:grid-cols-2" onSubmit={handleSubmit(onSubmit, onInvalid)}>
+        {error ? (
+          <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 md:col-span-2">
+            {error}
+          </div>
+        ) : null}
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Job Position *</span>
-         <input
-           className="form-input"
-           placeholder="e.g. Senior QA Engineer"
-           {...register("position", { required: "Job position is required" })}
-         />
-         {errors.position ? <span className="text-xs text-red-600">{errors.position.message}</span> : null}
-      </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Job Position *</span>
+          <input
+            className="form-input"
+            placeholder="e.g. Senior QA Engineer"
+            {...register("position", { required: "Job position is required" })}
+          />
+          {errors.position ? <span className="text-xs text-red-600">{errors.position.message}</span> : null}
+        </label>
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Experience Required *</span>
-         <input
-           className="form-input"
-           placeholder="e.g. 5+ Years"
-           {...register("experience", { required: "Experience is required" })}
-         />
-         {errors.experience ? <span className="text-xs text-red-600">{errors.experience.message}</span> : null}
-      </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Experience Required *</span>
+          <input
+            className="form-input"
+            placeholder="e.g. 5+ Years"
+            {...register("experience", { required: "Experience is required" })}
+          />
+          {errors.experience ? <span className="text-xs text-red-600">{errors.experience.message}</span> : null}
+        </label>
 
-      <label className="block">
-         <span className="mb-1 block text-sm font-semibold text-zar-title">Location *</span>
-         <input
-           className="form-input"
-           placeholder="e.g. Mumbai, India (On-site)"
-           {...register("location", { required: "Location is required" })}
-         />
-         {errors.location ? <span className="text-xs text-red-600">{errors.location.message}</span> : null}
-      </label>
+        <label className="block md:col-span-2 lg:col-span-1">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Location *</span>
+          <input
+            className="form-input"
+            placeholder="e.g. Mumbai, India (On-site)"
+            {...register("location", { required: "Location is required" })}
+          />
+          {errors.location ? <span className="text-xs text-red-600">{errors.location.message}</span> : null}
+        </label>
 
-      <div className="block">
-        <span className="mb-1 block text-sm font-semibold text-zar-title">Job Description *</span>
-        <Controller
-          control={control}
-          name="jobDescription"
-          rules={{ required: "Job description is required" }}
-          render={({ field }) => (
-            <RichTextEditor
-              value={field.value}
-              onChange={field.onChange}
-              placeholder="Detailed job description, responsibilities, and requirements..."
-            />
-          )}
-        />
-        {errors.jobDescription ? <span className="text-xs text-red-600">{errors.jobDescription.message}</span> : null}
-      </div>
+        <div className="block md:col-span-2">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Job Description *</span>
+          <Controller
+            control={control}
+            name="jobDescription"
+            rules={{ required: "Job description is required" }}
+            render={({ field }) => (
+              <RichTextEditor
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Detailed job description, responsibilities, and requirements..."
+              />
+            )}
+          />
+          {errors.jobDescription ? <span className="text-xs text-red-600">{errors.jobDescription.message}</span> : null}
+        </div>
 
-      <div className="flex gap-2 pt-2">
-        <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Saving..." : "Save Career"}
-        </Button>
-        <Button type="button" variant="secondary" onClick={() => router.push("/careers")}>
-          Cancel
-        </Button>
-      </div>
-    </form>
+        <div className="flex gap-2 pt-2 md:col-span-2">
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? "Saving..." : "Save Career"}
+          </Button>
+          <Button type="button" variant="secondary" onClick={() => router.push("/careers")}>
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </motion.div>
   );
 }

@@ -6,14 +6,16 @@ const appDir = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  outputFileTracingRoot: appDir,
+  basePath: '/Zar_backend',
   images: {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "localhost",
-        port: "4000",
-        pathname: "/uploads/**",
+        hostname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
       },
     ],
   },

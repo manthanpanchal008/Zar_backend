@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
+import { ViewModal } from "@/components/common/ViewModal";
 import { API_BASE_URL, api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import type { CategoryNew } from "@/types";
@@ -18,6 +19,7 @@ function imageSrc(path: string) {
 export default function CategoriesPage() {
   const { user } = useAuthGuard();
   const [items, setItems] = useState<CategoryNew[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryNew | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -104,27 +106,30 @@ export default function CategoriesPage() {
         </button>
       ),
     },
-    ...(isAdmin
-      ? [
-          {
-            key: "actions",
-            label: "Actions",
-            render: (item: CategoryNew) => (
-              <div className="flex gap-2">
-                <Link
-                  className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
-                  href={`/category/${item.id}`}
-                >
-                  Edit
-                </Link>
-                <Button variant="danger" onClick={() => deleteCategory(item.id)}>
-                  Delete
-                </Button>
-              </div>
-            ),
-          },
-        ]
-      : []),
+    {
+      key: "actions",
+      label: "Actions",
+      render: (item: CategoryNew) => (
+        <div className="flex gap-2">
+          <Button variant="secondary" className="px-3 py-2" onClick={() => setSelectedCategory(item)}>
+            View
+          </Button>
+          {isAdmin && (
+            <>
+              <Link
+                className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
+                href={`/category/${item.id}`}
+              >
+                Edit
+              </Link>
+              <Button variant="danger" className="px-3 py-2" onClick={() => deleteCategory(item.id)}>
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
+      ),
+    },
   ];
 
   const filters = [
@@ -169,6 +174,60 @@ export default function CategoriesPage() {
           )}
         </CardBody>
       </Card>
+
+      <ViewModal
+        isOpen={!!selectedCategory}
+        onClose={() => setSelectedCategory(null)}
+        title="Category Details"
+      >
+        {selectedCategory && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Category Image */}
+              <div className="flex-shrink-0">
+                <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider mb-2">Category Image</h4>
+                {selectedCategory.image_url || selectedCategory.image ? (
+                  <div className="h-40 w-40 rounded-xl overflow-hidden border border-[#eee7dd] bg-gray-50 flex items-center justify-center">
+                    <img
+                      alt={selectedCategory.name}
+                      src={imageSrc(selectedCategory.image_url || `/uploads/categories/${selectedCategory.image}`)}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-40 w-40 rounded-xl border border-dashed border-[#eee7dd] bg-[#fdfcfa] flex items-center justify-center text-zar-muted">
+                    No Image
+                  </div>
+                )}
+              </div>
+
+              {/* Category Information */}
+              <div className="flex-1 space-y-4">
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Category Name</h4>
+                  <p className="mt-1 text-base font-bold text-black">{selectedCategory.name}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Slug</h4>
+                  <p className="mt-1 text-sm font-mono text-zar-title">{selectedCategory.slug}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Status</h4>
+                  <span
+                    className={`mt-1 inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                      selectedCategory.isActive
+                        ? "bg-green-50 text-green-700 border-green-200"
+                        : "bg-red-50 text-red-700 border-red-200"
+                    }`}
+                  >
+                    {selectedCategory.isActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </ViewModal>
     </AdminLayout>
   );
 }

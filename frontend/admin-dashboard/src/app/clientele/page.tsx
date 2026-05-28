@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { DataTable } from "@/components/ui/DataTable";
+import { ViewModal } from "@/components/common/ViewModal";
 import { API_BASE_URL, api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import type { Clientele } from "@/types";
@@ -18,6 +19,7 @@ function imageSrc(path: string) {
 export default function ClientelePage() {
   const { user } = useAuthGuard();
   const [clientele, setClientele] = useState<Clientele[]>([]);
+  const [selectedClient, setSelectedClient] = useState<Clientele | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -73,27 +75,30 @@ export default function ClientelePage() {
       label: "Country",
       sortable: true,
     },
-    ...(isAdmin
-      ? [
-          {
-            key: "actions",
-            label: "Actions",
-            render: (item: Clientele) => (
-              <div className="flex gap-2">
-                <Link
-                  className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
-                  href={`/clientele/${item.id}`}
-                >
-                  Edit
-                </Link>
-                <Button variant="danger" onClick={() => deleteClientele(item.id)}>
-                  Delete
-                </Button>
-              </div>
-            ),
-          },
-        ]
-      : []),
+    {
+      key: "actions",
+      label: "Actions",
+      render: (item: Clientele) => (
+        <div className="flex gap-2">
+          <Button variant="secondary" className="px-3 py-2" onClick={() => setSelectedClient(item)}>
+            View
+          </Button>
+          {isAdmin && (
+            <>
+              <Link
+                className="rounded-lg bg-[#f3eadb] px-3 py-2 text-sm font-semibold text-black hover:bg-zar-gold transition"
+                href={`/clientele/${item.id}`}
+              >
+                Edit
+              </Link>
+              <Button variant="danger" className="px-3 py-2" onClick={() => deleteClientele(item.id)}>
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
+      ),
+    },
   ];
 
   const filters = [
@@ -138,6 +143,48 @@ export default function ClientelePage() {
           )}
         </CardBody>
       </Card>
+
+      <ViewModal
+        isOpen={!!selectedClient}
+        onClose={() => setSelectedClient(null)}
+        title="Clientele Details"
+      >
+        {selectedClient && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Clientele Image */}
+              <div className="flex-shrink-0">
+                <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider mb-2">Image</h4>
+                {selectedClient.image_url || selectedClient.clientele_image ? (
+                  <div className="h-40 w-40 rounded-xl overflow-hidden border border-[#eee7dd] bg-gray-50 flex items-center justify-center">
+                    <img
+                      alt={selectedClient.clientele_title}
+                      src={imageSrc(selectedClient.image_url || `/uploads/clientele/${selectedClient.clientele_image}`)}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-40 w-40 rounded-xl border border-dashed border-[#eee7dd] bg-[#fdfcfa] flex items-center justify-center text-zar-muted">
+                    No Image
+                  </div>
+                )}
+              </div>
+
+              {/* Clientele Info */}
+              <div className="flex-1 space-y-4">
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Title</h4>
+                  <p className="mt-1 text-base font-bold text-black">{selectedClient.clientele_title}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Country</h4>
+                  <p className="mt-1 text-sm font-medium text-black">{selectedClient.country || "-"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </ViewModal>
     </AdminLayout>
   );
 }

@@ -16,7 +16,7 @@ jest.mock("@/lib/api", () => ({
       if (url.includes("gold-type-options")) {
         return Promise.resolve({ data: { items: [{ id: 20, name: "22K", purity: 91.6 }] } });
       }
-      if (url.includes("making-type-options")) {
+      if (url.includes("collection-type-options")) {
         return Promise.resolve({ data: { items: [{ id: 30, name: "Handmade" }] } });
       }
       if (url.includes("generate-sku")) {
@@ -59,10 +59,9 @@ describe("Product form", () => {
     await userEvent.selectOptions(screen.getByLabelText(/^gold type/i), "20");
 
     await waitFor(() => expect(screen.getByRole("option", { name: "Handmade" })).toBeInTheDocument());
-    await userEvent.selectOptions(screen.getByLabelText(/^making type/i), "30");
+    await userEvent.selectOptions(screen.getByLabelText(/^collection type/i), "30");
 
     await userEvent.type(screen.getByLabelText(/product title/i), "Gold Ring");
-    await userEvent.type(screen.getByLabelText(/collection name/i), "Bridal");
     await userEvent.type(screen.getByLabelText(/number of pcs/i), "1");
     await userEvent.upload(screen.getByLabelText(/upload product images/i), new File(["image"], "ring.png", { type: "image/png" }));
     await userEvent.click(screen.getByRole("button", { name: /save product/i }));

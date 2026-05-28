@@ -197,14 +197,14 @@ export function DataTable<T extends Record<string, any>>({
 
       {/* Table Container */}
       <div className="overflow-x-auto rounded-lg border border-[#eee7dd] bg-white">
-        <table className="admin-table w-full text-left border-collapse">
+        <table className="admin-table w-full min-w-[900px] text-left border-collapse table-auto">
           <thead>
             <tr className="bg-zar-bg">
               {columns.map((col) => (
                 <th
                   key={col.key}
                   onClick={() => col.sortable && handleSort(col.key)}
-                  className={`select-none ${col.sortable ? "cursor-pointer hover:bg-[#eee7dd]" : ""}`}
+                  className={`select-none whitespace-nowrap ${col.sortable ? "cursor-pointer hover:bg-[#eee7dd]" : ""}`}
                 >
                   <div className="flex items-center gap-1">
                     <span>{col.label}</span>
@@ -231,8 +231,20 @@ export function DataTable<T extends Record<string, any>>({
               paginatedData.map((item, rowIdx) => (
                 <tr key={item.id || rowIdx} className="hover:bg-zar-bg/50 transition">
                   {columns.map((col) => (
-                    <td key={col.key}>
-                      {col.render ? col.render(item) : (item[col.key] ?? "-")}
+                    <td key={col.key} className="px-4 py-3.5">
+                      {col.key === "actions" ? (
+                        <div className="flex flex-wrap gap-2 min-w-[180px]">
+                          {col.render ? col.render(item) : "-"}
+                        </div>
+                      ) : col.render ? (
+                        <div className="max-w-[250px] break-words whitespace-normal">
+                          {col.render(item)}
+                        </div>
+                      ) : (
+                        <div className="max-w-[250px] truncate" title={item[col.key] !== null && item[col.key] !== undefined ? String(item[col.key]) : ""}>
+                          {item[col.key] !== null && item[col.key] !== undefined ? String(item[col.key]) : "-"}
+                        </div>
+                      )}
                     </td>
                   ))}
                 </tr>

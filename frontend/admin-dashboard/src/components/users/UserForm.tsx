@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/Button";
 import { api } from "@/lib/api";
 import type { AdminUser } from "@/types";
@@ -31,6 +32,10 @@ export function UserForm({ editUser }: { editUser?: AdminUser }) {
     },
   });
 
+  const onInvalid = () => {
+    toast.error("Please fill in all required fields.");
+  };
+
   async function onSubmit(values: UserFormValues) {
     setError("");
     const payload: Record<string, any> = {
@@ -56,7 +61,7 @@ export function UserForm({ editUser }: { editUser?: AdminUser }) {
   }
 
   return (
-    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit)}>
+    <form className="space-y-4 w-full" onSubmit={handleSubmit(onSubmit, onInvalid)}>
       {error ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
 
       <label className="block">
