@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Calendar, Coins, Home, Layers, LogOut, Sparkles, UserCheck, 
-  Users, Hammer, MessageSquare, Briefcase, Mail, ChevronDown, ChevronRight, Gem 
+  Users, Briefcase, Mail, ChevronDown, ChevronRight, Gem,
+  Milestone, Link2, FileText, MessageSquare
 } from "lucide-react";
 import { clearAuth } from "@/lib/auth";
 import type { AdminUser } from "@/types";
@@ -20,36 +21,66 @@ interface SidebarProps {
 
 export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const [catalogExpanded, setCatalogExpanded] = useState(false);
 
-  // Group 1 Collapsible Dropdown Items
-  const catalogItems = [
-    { href: "/goldtype", label: "GoldType", icon: Coins },
+  // Collapsible Dropdown States
+  const [productsExpanded, setProductsExpanded] = useState(false);
+  const [inquiryExpanded, setInquiryExpanded] = useState(false);
+  const [careersExpanded, setCareersExpanded] = useState(false);
+
+  // Group 1: Products
+  const productItems = [
+    { href: "/goldtype", label: "Gold Type", icon: Coins },
     { href: "/category", label: "Category", icon: Layers },
-    { href: "/collectiontype", label: "CollectionType", icon: Gem }, // TASK 10: Gem icon for collection type
+    { href: "/collectiontype", label: "CollectionType", icon: Gem },
     { href: "/products", label: "Products", icon: Sparkles },
   ];
 
+  // Group 2: Inquiry
+  const inquiryItems = [
+    { href: "/build-connection", label: "Become a Partner", icon: Link2 },
+    { href: "/contact-inquiry", label: "Contact Inquiries", icon: Mail },
+  ];
+
+  // Group 3: Careers
+  const careerItems = [
+    { href: "/careers", label: "Careers", icon: Briefcase },
+    { href: "/career-application", label: "Career Applications", icon: FileText },
+  ];
+
+  // Standalone items
   const standaloneItems = [
     { href: "/events", label: "Events", icon: Calendar },
-    { href: "/inquiry", label: "Inquiry", icon: Mail },
+    { href: "/zar-journey", label: "The Zar Journey", icon: Milestone },
     { href: "/clientele", label: "Clientele", icon: UserCheck },
     { href: "/testimonials", label: "Testimonials", icon: MessageSquare },
-    { href: "/careers", label: "Careers", icon: Briefcase },
     { href: "/users", label: "Users", icon: Users, adminOnly: true },
   ];
 
-  // Auto-expand catalog dropdown if any child page is active on mount/navigation
+  // Auto-expand dropdowns if any child page is active
   useEffect(() => {
-    const isCatalogChildActive = catalogItems.some(item => 
+    const isProductsActive = productItems.some(item => 
       pathname === item.href || pathname.startsWith(`${item.href}/`)
     );
-    if (isCatalogChildActive) {
-      setCatalogExpanded(true);
-    }
+    if (isProductsActive) setProductsExpanded(true);
+
+    const isInquiryActive = inquiryItems.some(item => 
+      pathname === item.href || pathname.startsWith(`${item.href}/`)
+    );
+    if (isInquiryActive) setInquiryExpanded(true);
+
+    const isCareersActive = careerItems.some(item => 
+      pathname === item.href || pathname.startsWith(`${item.href}/`)
+    );
+    if (isCareersActive) setCareersExpanded(true);
   }, [pathname]);
 
-  const isCatalogActive = catalogItems.some(item => 
+  const isProductsActive = productItems.some(item => 
+    pathname === item.href || pathname.startsWith(`${item.href}/`)
+  );
+  const isInquiryActive = inquiryItems.some(item => 
+    pathname === item.href || pathname.startsWith(`${item.href}/`)
+  );
+  const isCareersActive = careerItems.some(item => 
     pathname === item.href || pathname.startsWith(`${item.href}/`)
   );
 
@@ -74,7 +105,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       <nav className="flex-1 space-y-1 overflow-y-auto">
         {/* Render Dashboard (always top) */}
         {(() => {
-          const active = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+          const active = pathname === "/dashboard";
           return (
             <Link
               href="/dashboard"
@@ -89,26 +120,25 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
           );
         })()}
 
-        {/* Collapsible Dropdown for Catalog */}
+        {/* Products Dropdown */}
         <div>
           <button
-            onClick={() => setCatalogExpanded(!catalogExpanded)}
+            onClick={() => setProductsExpanded(!productsExpanded)}
             className={`flex w-full items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold transition ${
-              isCatalogActive 
+              isProductsActive 
                 ? "bg-zar-bg text-black border border-[#eee7dd]/50" 
                 : "text-zar-muted hover:bg-zar-bg hover:text-black"
             }`}
           >
             <div className="flex items-center gap-3">
               <Layers size={18} />
-              <span>Catalog</span>
+              <span>Products</span>
             </div>
-            {catalogExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            {productsExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
 
-          {/* Smooth height expand animation */}
           <AnimatePresence initial={false}>
-            {catalogExpanded && (
+            {productsExpanded && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
@@ -116,7 +146,103 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden pl-4 mt-1 space-y-1"
               >
-                {catalogItems.map((item) => {
+                {productItems.map((item) => {
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={onClose}
+                      className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                        active ? "bg-zar-gold text-black" : "text-zar-muted hover:bg-zar-bg hover:text-black"
+                      }`}
+                    >
+                      <Icon size={18} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Inquiry Dropdown */}
+        <div>
+          <button
+            onClick={() => setInquiryExpanded(!inquiryExpanded)}
+            className={`flex w-full items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold transition ${
+              isInquiryActive 
+                ? "bg-zar-bg text-black border border-[#eee7dd]/50" 
+                : "text-zar-muted hover:bg-zar-bg hover:text-black"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Mail size={18} />
+              <span>Inquiry</span>
+            </div>
+            {inquiryExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </button>
+
+          <AnimatePresence initial={false}>
+            {inquiryExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden pl-4 mt-1 space-y-1"
+              >
+                {inquiryItems.map((item) => {
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={onClose}
+                      className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                        active ? "bg-zar-gold text-black" : "text-zar-muted hover:bg-zar-bg hover:text-black"
+                      }`}
+                    >
+                      <Icon size={18} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Careers Dropdown */}
+        <div>
+          <button
+            onClick={() => setCareersExpanded(!careersExpanded)}
+            className={`flex w-full items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold transition ${
+              isCareersActive 
+                ? "bg-zar-bg text-black border border-[#eee7dd]/50" 
+                : "text-zar-muted hover:bg-zar-bg hover:text-black"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Briefcase size={18} />
+              <span>Careers</span>
+            </div>
+            {careersExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </button>
+
+          <AnimatePresence initial={false}>
+            {careersExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden pl-4 mt-1 space-y-1"
+              >
+                {careerItems.map((item) => {
                   const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   const Icon = item.icon;
                   return (
@@ -159,7 +285,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
         })}
       </nav>
 
-      {/* Logout Button (Pinned bottom without overlay issue) */}
+      {/* Logout Button */}
       <div className="pt-4 border-t border-[#eee7dd] mt-auto">
         <button
           className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-zar-muted hover:bg-zar-bg hover:text-black transition"

@@ -568,6 +568,69 @@ async function ensureSchema() {
     }
   }
 
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS zar_journey (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      year INT NOT NULL,
+      description TEXT NOT NULL,
+      image VARCHAR(500) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS build_connections (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      fullName VARCHAR(255) NOT NULL,
+      companyName VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      country ENUM('India', 'Others') NOT NULL,
+      state VARCHAR(255) NOT NULL,
+      city VARCHAR(255) NOT NULL,
+      pincode VARCHAR(20) NOT NULL,
+      contact VARCHAR(50) NOT NULL,
+      category ENUM('Distributor', 'Retailers', 'Wholesaler') NOT NULL,
+      referredBy VARCHAR(255) DEFAULT NULL,
+      companyWebsite VARCHAR(255) DEFAULT NULL,
+      message TEXT DEFAULT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await addColumnIfNotExists(connection, 'build_connections', 'state', "VARCHAR(255) NOT NULL DEFAULT '' AFTER country");
+  await addColumnIfNotExists(connection, 'build_connections', 'city', "VARCHAR(255) NOT NULL DEFAULT '' AFTER state");
+
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS contact_inquiries (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      fullName VARCHAR(255) NOT NULL,
+      companyName VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      contactNumber VARCHAR(50) NOT NULL,
+      inquiryType VARCHAR(100) NOT NULL,
+      message TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await connection.query(`
+    CREATE TABLE IF NOT EXISTS career_applications (
+      id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+      fullName VARCHAR(255) NOT NULL,
+      companyName VARCHAR(255) NOT NULL,
+      role VARCHAR(255) NOT NULL,
+      workExperience VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      contactNumber VARCHAR(50) NOT NULL,
+      cvFile VARCHAR(500) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
   await connection.end();
 }
 

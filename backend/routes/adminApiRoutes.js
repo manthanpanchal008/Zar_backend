@@ -10,6 +10,10 @@ const clienteleController = require('../controllers/admin/clienteleController');
 const testimonialController = require('../controllers/admin/testimonialController');
 const careerController = require('../controllers/admin/careerController');
 const manufacturingController = require('../controllers/admin/manufacturingController');
+const zarJourneyController = require('../controllers/admin/zarJourneyController');
+const buildConnectionController = require('../controllers/admin/buildConnectionController');
+const contactInquiryController = require('../controllers/admin/contactInquiryController');
+const careerApplicationController = require('../controllers/admin/careerApplicationController');
 const { requireJwtAuth, requireJwtRole } = require('../middleware/auth');
 const { imageUpload, handleMulterError } = require('../middleware/upload');
 const { listProducts } = require('../models/productModel');
@@ -29,6 +33,7 @@ const collectionTypeUpload = imageUpload('makingtypes', { files: 1, fallbackName
 const eventUpload = imageUpload('events', { files: 10, fallbackName: 'event-image' });
 const clienteleUpload = imageUpload('clientele', { files: 1, fallbackName: 'clientele-image' });
 const manufacturingUpload = imageUpload('manufacturing', { files: 1, fallbackName: 'manufacturing-image' });
+const zarJourneyUpload = imageUpload('zar_journey', { files: 1, fallbackName: 'journey-image' });
 
 router.post('/api/auth/login', authController.login);
 router.post('/api/auth/logout', requireJwtAuth, authController.logout);
@@ -209,6 +214,28 @@ router.post('/api/admin/manufacturing', requireJwtAuth, requireJwtRole('admin'),
 router.put('/api/admin/manufacturing/:id', requireJwtAuth, requireJwtRole('admin'), manufacturingUpload.single('image'), manufacturingController.update);
 router.delete('/api/admin/manufacturing/:id', requireJwtAuth, requireJwtRole('admin'), manufacturingController.destroy);
 router.put('/api/admin/manufacturing/:id/toggle', requireJwtAuth, requireJwtRole('admin'), manufacturingController.toggleStatus);
+
+// Zar Journey CRUD routes
+router.get('/api/zar-journey', requireJwtAuth, zarJourneyController.index);
+router.get('/api/zar-journey/:id', requireJwtAuth, zarJourneyController.show);
+router.post('/api/zar-journey', requireJwtAuth, requireJwtRole('admin'), zarJourneyUpload.single('image'), zarJourneyController.store);
+router.put('/api/zar-journey/:id', requireJwtAuth, requireJwtRole('admin'), zarJourneyUpload.single('image'), zarJourneyController.update);
+router.delete('/api/zar-journey/:id', requireJwtAuth, requireJwtRole('admin'), zarJourneyController.destroy);
+
+// Build Connection Admin routes
+router.get('/api/build-connection', requireJwtAuth, buildConnectionController.index);
+router.get('/api/build-connection/:id', requireJwtAuth, buildConnectionController.show);
+router.delete('/api/build-connection/:id', requireJwtAuth, requireJwtRole('admin'), buildConnectionController.destroy);
+
+// Contact Inquiry Admin routes
+router.get('/api/contact-inquiry', requireJwtAuth, contactInquiryController.index);
+router.get('/api/contact-inquiry/:id', requireJwtAuth, contactInquiryController.show);
+router.delete('/api/contact-inquiry/:id', requireJwtAuth, requireJwtRole('admin'), contactInquiryController.destroy);
+
+// Career Application Admin routes
+router.get('/api/career-application', requireJwtAuth, careerApplicationController.index);
+router.get('/api/career-application/:id', requireJwtAuth, careerApplicationController.show);
+router.delete('/api/career-application/:id', requireJwtAuth, requireJwtRole('admin'), careerApplicationController.destroy);
 
 router.use(handleMulterError);
 

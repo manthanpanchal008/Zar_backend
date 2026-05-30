@@ -119,3 +119,56 @@ export type Career = {
   updated_at?: string;
 };
 
+export type ZarJourney = {
+  id: number;
+  year: number;
+  description: string;
+  image: string;
+  image_url?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type BuildConnection = {
+  id: number;
+  fullName: string;
+  companyName: string;
+  email: string;
+  country: "India" | "Others";
+  state: string;
+  city: string;
+  pincode: string;
+  contact: string;
+  category: "Distributor" | "Retailers" | "Wholesaler";
+  referredBy?: string | null;
+  companyWebsite?: string | null;
+  message?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type ContactInquiry = {
+  id: number;
+  fullName: string;
+  companyName: string;
+  email: string;
+  contactNumber: string;
+  inquiryType: string;
+  message: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type CareerApplication = {
+  id: number;
+  fullName: string;
+  companyName: string;
+  role: string;
+  workExperience: string;
+  email: string;
+  contactNumber: string;
+  cvFile: string;
+  created_at?: string;
+  updated_at?: string;
+};
+

@@ -2,22 +2,17 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getToken } from "@/lib/auth";
 
-export default function HomePage() {
+export default function HomeRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (getToken()) {
-      router.replace("/dashboard");
-    } else {
-      router.replace("/login");
-    }
+    router.replace("/dashboard");
   }, [router]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zar-bg text-zar-muted">
-      Redirecting...
+      Redirecting to dashboard...
     </div>
   );
 }

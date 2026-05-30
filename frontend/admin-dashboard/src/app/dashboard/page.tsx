@@ -15,7 +15,6 @@ type DashboardStats = {
   events: number;
   testimonials: number;
   careers: number;
-  manufacturing: number;
 };
 
 export default function DashboardPage() {

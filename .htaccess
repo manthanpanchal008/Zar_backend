@@ -1,9 +1,7 @@
 # ----------------------------------------------------------------------
 # Zar Jewels Apache Rewrite & Proxy rules for WHM/cPanel VPS
 # ----------------------------------------------------------------------
-
 Options -MultiViews
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -14,10 +12,12 @@ Options -MultiViews
   # 2. Route uploads requests to the local Node.js Express backend static directory
   RewriteRule ^uploads/(.*)$ http://127.0.0.1:5001/uploads/$1 [P,L]
 
-  # 3. Route all other requests to the local Next.js Admin Dashboard (port 5002)
+  # 3. Route root request directly to Next.js dashboard root (prevents mod_dir index.html 404s)
+  RewriteRule ^$ http://127.0.0.1:5002/Zar_backend/ [P,L]
+
+  # 4. Route all other requests to the local Next.js Admin Dashboard (port 5002)
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^(.*)$ http://127.0.0.1:5002/Zar_backend/$1 [P,L]
 </IfModule>
-
-# Adjust upload limits if handled by Apache/PHP FPM (optional but helpful)
+# Adjust upload limits if handled by Apache/PHP FPM
 LimitRequestBody 10485760

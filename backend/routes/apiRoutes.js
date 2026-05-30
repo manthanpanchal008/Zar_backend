@@ -1,4 +1,11 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
+const zarJourneyController = require('../controllers/admin/zarJourneyController');
+const buildConnectionController = require('../controllers/admin/buildConnectionController');
+const contactInquiryController = require('../controllers/admin/contactInquiryController');
+const careerApplicationController = require('../controllers/admin/careerApplicationController');
+const { cvUpload, handleMulterError } = require('../middleware/upload');
+const uploadCv = cvUpload('cvs', { files: 1, fallbackName: 'applicant-cv' });
 const { listUsers } = require('../models/userModel');
 const { listContacts, createContact } = require('../models/contactModel');
 
@@ -622,5 +629,40 @@ router.get('/api/events/:id', async (req, res) => {
     });
   }
 });
+
+// Rate limiters specifically for public forms
+const buildConnectionLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many submissions from this IP, please try again after 10 minutes.' },
+});
+
+const contactInquiryLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many contact inquiries from this IP, please try again after 10 minutes.' },
+});
+
+const careerApplicationLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many career applications from this IP, please try again after 10 minutes.' },
+});
+
+// Zar Journey public route
+router.get('/api/public/zar-journey', zarJourneyController.publicList);
+
+// Public form routes with rate limiters
+router.post('/api/build-connection', buildConnectionLimiter, buildConnectionController.store);
+router.post('/api/contact-inquiry', contactInquiryLimiter, contactInquiryController.store);
+router.post('/api/career-application', careerApplicationLimiter, uploadCv.single('cvFile'), careerApplicationController.store);
+
+router.use(handleMulterError);
 
 module.exports = router;

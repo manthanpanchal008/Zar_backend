@@ -9,6 +9,7 @@ import { DataTable } from "@/components/ui/DataTable";
 import { ViewModal } from "@/components/common/ViewModal";
 import { api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { formatDate } from "@/lib/utils";
 import type { Testimonial } from "@/types";
 
 export default function TestimonialsPage() {
@@ -161,7 +162,7 @@ export default function TestimonialsPage() {
               <div>
                 <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Created Date</h4>
                 <p className="mt-1 text-sm font-medium text-black">
-                  {new Date(selectedTestimonial.created_at).toLocaleDateString()}
+                  {formatDate(selectedTestimonial.created_at)}
                 </p>
               </div>
             )}

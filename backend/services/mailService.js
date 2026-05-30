@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer');
 const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = require('../config/env');
+const { getAdminMailTemplate } = require('../templates/buildConnectionAdminMail');
+const { getUserMailTemplate } = require('../templates/buildConnectionUserMail');
+const { getContactInquiryAdminMail } = require('../templates/contactInquiryAdminMail');
+const { getContactInquiryUserMail } = require('../templates/contactInquiryUserMail');
+const { getCareerApplicationAdminMail } = require('../templates/careerApplicationAdminMail');
+const { getCareerApplicationUserMail } = require('../templates/careerApplicationUserMail');
 
 // Create the transporter using SMTP environment configurations
 const transporter = nodemailer.createTransport({
@@ -157,6 +163,78 @@ async function sendOtpEmail(email, name, otp, expiryMinutes = 15) {
   await transporter.sendMail(mailOptions);
 }
 
+async function sendConnectionAdminEmail(leadData) {
+  const mailOptions = {
+    from: `"Zar Jewels Admin" <${SMTP_USER}>`,
+    to: SMTP_USER,
+    subject: 'New Build A Connection Inquiry',
+    html: getAdminMailTemplate(leadData),
+  };
+  await transporter.sendMail(mailOptions);
+}
+
+async function sendConnectionUserThankYouEmail(userEmail, userName) {
+  const mailOptions = {
+    from: `"Zar Jewels" <${SMTP_USER}>`,
+    to: userEmail,
+    subject: 'Thank you for showing interest | Zar Jewels',
+    html: getUserMailTemplate(userName),
+  };
+  await transporter.sendMail(mailOptions);
+}
+
+async function sendContactInquiryAdminMail(data) {
+  const mailOptions = {
+    from: `"Zar Jewels Admin" <${SMTP_USER}>`,
+    to: SMTP_USER,
+    subject: 'New Contact Inquiry Submission',
+    html: getContactInquiryAdminMail(data),
+  };
+  await transporter.sendMail(mailOptions);
+}
+
+async function sendContactInquiryUserThankYouMail(userEmail, userName) {
+  const mailOptions = {
+    from: `"Zar Jewels" <${SMTP_USER}>`,
+    to: userEmail,
+    subject: 'Thank you for contacting Zar Jewels',
+    html: getContactInquiryUserMail(userName),
+  };
+  await transporter.sendMail(mailOptions);
+}
+
+async function sendCareerApplicationAdminMail(data, cvFullPath, cvFilename) {
+  const mailOptions = {
+    from: `"Zar Jewels Admin" <${SMTP_USER}>`,
+    to: SMTP_USER,
+    subject: `New Career Application for ${data.role}`,
+    html: getCareerApplicationAdminMail(data),
+    attachments: [
+      {
+        filename: cvFilename,
+        path: cvFullPath,
+      },
+    ],
+  };
+  await transporter.sendMail(mailOptions);
+}
+
+async function sendCareerApplicationUserThankYouMail(userEmail, userName, role) {
+  const mailOptions = {
+    from: `"Zar Jewels" <${SMTP_USER}>`,
+    to: userEmail,
+    subject: `Application Received: ${role} | Zar Jewels`,
+    html: getCareerApplicationUserMail(userName, role),
+  };
+  await transporter.sendMail(mailOptions);
+}
+
 module.exports = {
   sendOtpEmail,
+  sendConnectionAdminEmail,
+  sendConnectionUserThankYouEmail,
+  sendContactInquiryAdminMail,
+  sendContactInquiryUserThankYouMail,
+  sendCareerApplicationAdminMail,
+  sendCareerApplicationUserThankYouMail,
 };

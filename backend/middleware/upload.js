@@ -40,10 +40,40 @@ function imageUpload(folderName, options = {}) {
   });
 }
 
+function cvUpload(folderName = 'cvs', options = {}) {
+  const uploadDir = path.join(__dirname, '..', 'public', 'uploads', folderName);
+  fs.mkdirSync(uploadDir, { recursive: true });
+
+  const storage = multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, uploadDir),
+    filename: (_req, file, cb) => cb(null, createSafeFilename(file.originalname, options.fallbackName || 'cv')),
+  });
+
+  const allowedDocTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ];
+
+  return multer({
+    storage,
+    limits: {
+      fileSize: options.fileSize || 5 * 1024 * 1024, // 5MB Limit
+      files: 1,
+    },
+    fileFilter: (_req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      const isAllowedExt = ['.pdf', '.doc', '.docx'].includes(ext);
+      if (allowedDocTypes.includes(file.mimetype) && isAllowedExt) return cb(null, true);
+      return cb(new Error('Only PDF, DOC and DOCX document files are allowed.'));
+    },
+  });
+}
+
 function handleMulterError(err, _req, res, next) {
   if (!err) return next();
 
-  if (err instanceof multer.MulterError || /image files/.test(err.message)) {
+  if (err instanceof multer.MulterError || /image files|document files/.test(err.message)) {
     return res.status(400).json({ success: false, error: err.message });
   }
 
@@ -52,5 +82,6 @@ function handleMulterError(err, _req, res, next) {
 
 module.exports = {
   imageUpload,
+  cvUpload,
   handleMulterError,
 };

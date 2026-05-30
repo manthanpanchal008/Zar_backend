@@ -9,6 +9,7 @@ import { DataTable } from "@/components/ui/DataTable";
 import { ViewModal } from "@/components/common/ViewModal";
 import { API_BASE_URL, api } from "@/lib/api";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { formatDate } from "@/lib/utils";
 import type { Event } from "@/types";
 
 function imageSrc(path: string) {
@@ -91,27 +92,13 @@ export default function EventsPage() {
       key: "start_date",
       label: "Start Date",
       sortable: true,
-      render: (item: Event) =>
-        item.start_date
-          ? new Date(item.start_date).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })
-          : "-",
+      render: (item: Event) => formatDate(item.start_date),
     },
     {
       key: "end_date",
       label: "End Date",
       sortable: true,
-      render: (item: Event) =>
-        item.end_date
-          ? new Date(item.end_date).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })
-          : "-",
+      render: (item: Event) => formatDate(item.end_date),
     },
     {
       key: "status",
@@ -223,25 +210,13 @@ export default function EventsPage() {
               <div>
                 <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Start Date</h4>
                 <p className="mt-1 text-sm font-medium text-black">
-                  {selectedEvent.start_date
-                    ? new Date(selectedEvent.start_date).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      })
-                    : "-"}
+                  {formatDate(selectedEvent.start_date)}
                 </p>
               </div>
               <div>
                 <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">End Date</h4>
                 <p className="mt-1 text-sm font-medium text-black">
-                  {selectedEvent.end_date
-                    ? new Date(selectedEvent.end_date).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      })
-                    : "-"}
+                  {formatDate(selectedEvent.end_date)}
                 </p>
               </div>
             </div>
