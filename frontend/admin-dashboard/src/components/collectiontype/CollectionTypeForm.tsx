@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -14,27 +14,59 @@ type CollectionTypeFormValues = {
   name: string;
   is_active: boolean;
   image: FileList;
+  goldTypeId: string;
+  categoryId: string;
 };
 
 export function CollectionTypeForm({ collectionType }: { collectionType?: CollectionType }) {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [goldTypes, setGoldTypes] = useState<Array<{ id: number; name: string }>>([]);
+  const [allCategories, setAllCategories] = useState<Array<{ id: number; name: string; gold_type_id: number }>>([]);
 
   const {
     register,
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<CollectionTypeFormValues>({
     defaultValues: {
       name: collectionType?.name || "",
       is_active: collectionType ? !!collectionType.is_active : true,
+      goldTypeId: collectionType?.goldTypeId ? String(collectionType.goldTypeId) : "",
+      categoryId: collectionType?.categoryId ? String(collectionType.categoryId) : "",
     },
   });
 
+  const selectedGoldTypeId = watch("goldTypeId");
   const watchImage = watch("image");
   const hasNewImage = watchImage && watchImage.length > 0;
+
+  useEffect(() => {
+    api.get("/api/admin/gold-type-options").then((res) => {
+      setGoldTypes(res.data.items || []);
+    });
+    api.get("/api/admin/category-options").then((res) => {
+      setAllCategories(res.data.categories || []);
+    });
+  }, []);
+
+  const filteredCategories = allCategories.filter(
+    (cat) => cat.gold_type_id === Number(selectedGoldTypeId)
+  );
+
+  // Auto-reset category value if it doesn't belong to the newly selected gold type
+  useEffect(() => {
+    const currentCatId = watch("categoryId");
+    if (currentCatId && selectedGoldTypeId) {
+      const belongs = filteredCategories.some((cat) => String(cat.id) === currentCatId);
+      if (!belongs) {
+        setValue("categoryId", "");
+      }
+    }
+  }, [selectedGoldTypeId, filteredCategories, setValue, watch]);
 
   const onInvalid = () => {
     toast.error("Please fill in all required fields.");
@@ -45,6 +77,8 @@ export function CollectionTypeForm({ collectionType }: { collectionType?: Collec
     const formData = new FormData();
     formData.append("name", values.name.trim());
     formData.append("is_active", values.is_active ? "1" : "0");
+    formData.append("goldTypeId", values.goldTypeId);
+    formData.append("categoryId", values.categoryId);
 
     if (values.image?.[0]) {
       formData.append("image", values.image[0]);
@@ -53,8 +87,10 @@ export function CollectionTypeForm({ collectionType }: { collectionType?: Collec
     try {
       if (collectionType) {
         await api.put(`/api/admin/collection-types/${collectionType.id}`, formData, uploadConfig());
+        toast.success("Collection type updated successfully.");
       } else {
         await api.post("/api/admin/collection-types", formData, uploadConfig());
+        toast.success("Collection type created successfully.");
       }
       router.push("/collectiontype");
     } catch (requestError: any) {
@@ -78,7 +114,40 @@ export function CollectionTypeForm({ collectionType }: { collectionType?: Collec
           </div>
         ) : null}
 
-        <label className="block md:col-span-2 lg:col-span-1">
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Gold Type *</span>
+          <select
+            className="form-input"
+            {...register("goldTypeId", { required: "Gold Type is required" })}
+          >
+            <option value="">Select Gold Type</option>
+            {goldTypes.map((gt) => (
+              <option key={gt.id} value={gt.id}>
+                {gt.name}
+              </option>
+            ))}
+          </select>
+          {errors.goldTypeId ? <span className="text-xs text-red-600">{errors.goldTypeId.message}</span> : null}
+        </label>
+
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Category *</span>
+          <select
+            className="form-input"
+            disabled={!selectedGoldTypeId}
+            {...register("categoryId", { required: "Category is required" })}
+          >
+            <option value="">Select Category</option>
+            {filteredCategories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+          {errors.categoryId ? <span className="text-xs text-red-600">{errors.categoryId.message}</span> : null}
+        </label>
+
+        <label className="block md:col-span-2">
           <span className="mb-1 block text-sm font-semibold text-zar-title">Collection Type Name *</span>
           <input
             className="form-input"

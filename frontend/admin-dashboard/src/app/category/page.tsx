@@ -89,6 +89,12 @@ export default function CategoriesPage() {
       sortable: true,
     },
     {
+      key: "goldTypeName",
+      label: "Gold Type",
+      sortable: true,
+      render: (item: CategoryNew) => <span className="text-zar-title">{item.goldTypeName || "-"}</span>,
+    },
+    {
       key: "isActive",
       label: "Status",
       sortable: true,
@@ -206,6 +212,10 @@ export default function CategoriesPage() {
                 <div>
                   <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Category Name</h4>
                   <p className="mt-1 text-base font-bold text-black">{selectedCategory.name}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Gold Type</h4>
+                  <p className="mt-1 text-sm text-black">{selectedCategory.goldTypeName || "-"}</p>
                 </div>
                 <div>
                   <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Slug</h4>

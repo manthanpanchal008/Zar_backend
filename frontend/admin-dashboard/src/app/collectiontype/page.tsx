@@ -84,6 +84,18 @@ export default function CollectionTypesPage() {
       render: (item: CollectionType) => <span className="font-semibold text-black">{item.name}</span>,
     },
     {
+      key: "categoryName",
+      label: "Category",
+      sortable: true,
+      render: (item: CollectionType) => <span className="text-zar-title">{item.categoryName || "-"}</span>,
+    },
+    {
+      key: "goldTypeName",
+      label: "Gold Type",
+      sortable: true,
+      render: (item: CollectionType) => <span className="text-zar-title">{item.goldTypeName || "-"}</span>,
+    },
+    {
       key: "isActive",
       label: "Status",
       sortable: true,
@@ -201,6 +213,14 @@ export default function CollectionTypesPage() {
                 <div>
                   <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Name</h4>
                   <p className="mt-1 text-base font-bold text-black">{selectedCollectionType.name}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Gold Type</h4>
+                  <p className="mt-1 text-sm text-black">{selectedCollectionType.goldTypeName || "-"}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Category</h4>
+                  <p className="mt-1 text-sm text-black">{selectedCollectionType.categoryName || "-"}</p>
                 </div>
                 <div>
                   <h4 className="text-xs font-semibold text-zar-muted uppercase tracking-wider">Status</h4>

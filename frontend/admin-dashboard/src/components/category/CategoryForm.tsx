@@ -15,11 +15,13 @@ type CategoryFormValues = {
   slug: string;
   is_active: boolean;
   image: FileList;
+  goldTypeId: string;
 };
 
 export function CategoryForm({ category }: { category?: CategoryNew }) {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [goldTypes, setGoldTypes] = useState<Array<{ id: number; name: string }>>([]);
 
   const {
     register,
@@ -33,12 +35,23 @@ export function CategoryForm({ category }: { category?: CategoryNew }) {
       name: category?.name || "",
       slug: category?.slug || "",
       is_active: category ? !!category.is_active : true,
+      goldTypeId: category?.goldTypeId ? String(category.goldTypeId) : "",
     },
   });
 
   const name = watch("name");
   const watchImage = watch("image");
   const hasNewImage = watchImage && watchImage.length > 0;
+
+  useEffect(() => {
+    api.get("/api/admin/gold-type-options")
+      .then((res) => {
+        setGoldTypes(res.data.items || []);
+      })
+      .catch((err) => {
+        console.error("Failed to load gold types:", err);
+      });
+  }, []);
 
   const onInvalid = () => {
     toast.error("Please fill in all required fields.");
@@ -62,6 +75,7 @@ export function CategoryForm({ category }: { category?: CategoryNew }) {
     formData.append("name", values.name.trim());
     formData.append("slug", values.slug.trim());
     formData.append("is_active", values.is_active ? "1" : "0");
+    formData.append("goldTypeId", values.goldTypeId);
 
     if (values.image?.[0]) {
       formData.append("image", values.image[0]);
@@ -70,8 +84,10 @@ export function CategoryForm({ category }: { category?: CategoryNew }) {
     try {
       if (category) {
         await api.put(`/api/admin/categories/${category.id}`, formData, uploadConfig());
+        toast.success("Category updated successfully.");
       } else {
         await api.post("/api/admin/categories", formData, uploadConfig());
+        toast.success("Category created successfully.");
       }
       router.push("/category");
     } catch (requestError: any) {
@@ -94,6 +110,22 @@ export function CategoryForm({ category }: { category?: CategoryNew }) {
             {error}
           </div>
         ) : null}
+
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Gold Type *</span>
+          <select
+            className="form-input"
+            {...register("goldTypeId", { required: "Gold Type is required" })}
+          >
+            <option value="">Select Gold Type</option>
+            {goldTypes.map((gt) => (
+              <option key={gt.id} value={gt.id}>
+                {gt.name}
+              </option>
+            ))}
+          </select>
+          {errors.goldTypeId ? <span className="text-xs text-red-600">{errors.goldTypeId.message}</span> : null}
+        </label>
 
         <label className="block">
           <span className="mb-1 block text-sm font-semibold text-zar-title">Category Name *</span>

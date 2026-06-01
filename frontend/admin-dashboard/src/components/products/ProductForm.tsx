@@ -64,37 +64,84 @@ export function ProductForm({ product }: { product?: Product }) {
     },
   });
 
-  const onInvalid = () => {
-    toast.error("Please fill in all required fields.");
+  const onInvalid = (formErrors: any) => {
+    if (formErrors.gold_type_id) {
+      toast.error("Please select Gold Type");
+    } else if (formErrors.category_id) {
+      toast.error("Please select Category");
+    } else if (formErrors.collection_type_id) {
+      toast.error("Please select Collection Type");
+    } else {
+      toast.error("Please fill in all required fields.");
+    }
   };
 
   const categoryId = watch("category_id");
   const goldTypeId = watch("gold_type_id");
   const collectionTypeId = watch("collection_type_id");
 
+  const [loadingOptions, setLoadingOptions] = useState(true);
+
   useEffect(() => {
-    api.get("/api/admin/category-options").then((res) => setCategories(res.data.categories || []));
-    api.get("/api/admin/gold-type-options").then((res) => setGoldTypes(res.data.items || []));
-    api.get("/api/admin/collection-type-options").then((res) => setCollectionTypes(res.data.items || []));
+    Promise.all([
+      api.get("/api/admin/gold-type-options"),
+      api.get("/api/admin/category-options"),
+      api.get("/api/admin/collection-type-options")
+    ])
+      .then(([goldRes, catRes, colRes]) => {
+        setGoldTypes(goldRes.data.items || []);
+        setCategories(catRes.data.categories || []);
+        setCollectionTypes(colRes.data.items || []);
+        setLoadingOptions(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load options", err);
+        setLoadingOptions(false);
+      });
   }, []);
 
   useEffect(() => {
-    if (product && categories.length > 0) {
-      setValue("category_id", String(product.category_id));
+    if (product && !loadingOptions) {
+      setValue("gold_type_id", product.gold_type_id ? String(product.gold_type_id) : "");
+      setValue("category_id", product.category_id ? String(product.category_id) : "");
+      setValue("collection_type_id", product.collection_type_id ? String(product.collection_type_id) : "");
     }
-  }, [product, categories, setValue]);
+  }, [product, loadingOptions, setValue]);
+
+  const filteredCategories = categories.filter(
+    (cat) => cat.gold_type_id === Number(goldTypeId)
+  );
+
+  const filteredCollectionTypes = collectionTypes.filter(
+    (ct) => ct.gold_type_id === Number(goldTypeId) && ct.category_id === Number(categoryId)
+  );
+
+  // Auto-reset child selections on parent selection changes
+  useEffect(() => {
+    if (loadingOptions) return;
+    if (goldTypeId) {
+      const belongs = filteredCategories.some((cat) => String(cat.id) === categoryId);
+      if (!belongs) {
+        setValue("category_id", "");
+        setValue("collection_type_id", "");
+      }
+    } else {
+      setValue("category_id", "");
+      setValue("collection_type_id", "");
+    }
+  }, [goldTypeId, filteredCategories, setValue, categoryId, loadingOptions]);
 
   useEffect(() => {
-    if (product && goldTypes.length > 0) {
-      setValue("gold_type_id", String(product.gold_type_id));
+    if (loadingOptions) return;
+    if (categoryId && goldTypeId) {
+      const belongs = filteredCollectionTypes.some((ct) => String(ct.id) === collectionTypeId);
+      if (!belongs) {
+        setValue("collection_type_id", "");
+      }
+    } else {
+      setValue("collection_type_id", "");
     }
-  }, [product, goldTypes, setValue]);
-
-  useEffect(() => {
-    if (product && collectionTypes.length > 0) {
-      setValue("collection_type_id", String(product.collection_type_id));
-    }
-  }, [product, collectionTypes, setValue]);
+  }, [categoryId, goldTypeId, filteredCollectionTypes, setValue, collectionTypeId, loadingOptions]);
 
   // Watch dropdown selections and auto-generate SKU
   useEffect(() => {
@@ -196,19 +243,8 @@ export function ProductForm({ product }: { product?: Product }) {
         ) : null}
 
         <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-zar-title">Category *</span>
-          <select className="form-input" {...register("category_id", { required: "Category is required" })}>
-            <option value="">Select category</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </select>
-          {errors.category_id ? <span className="text-xs text-red-600">{errors.category_id.message}</span> : null}
-        </label>
-
-        <label className="block">
           <span className="mb-1 block text-sm font-semibold text-zar-title">Gold Type *</span>
-          <select className="form-input" {...register("gold_type_id", { required: "Gold Type is required" })}>
+          <select className="form-input" {...register("gold_type_id", { required: "Please select Gold Type" })}>
             <option value="">Select Gold Type</option>
             {goldTypes.map((gt) => (
               <option key={gt.id} value={gt.id}>{gt.name}</option>
@@ -218,10 +254,21 @@ export function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-zar-title">Category *</span>
+          <select className="form-input" disabled={!goldTypeId} {...register("category_id", { required: "Please select Category" })}>
+            <option value="">Select category</option>
+            {filteredCategories.map((cat) => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
+          </select>
+          {errors.category_id ? <span className="text-xs text-red-600">{errors.category_id.message}</span> : null}
+        </label>
+
+        <label className="block">
           <span className="mb-1 block text-sm font-semibold text-zar-title">Collection Type *</span>
-          <select className="form-input" {...register("collection_type_id", { required: "Collection Type is required" })}>
+          <select className="form-input" disabled={!categoryId} {...register("collection_type_id", { required: "Please select Collection Type" })}>
             <option value="">Select Collection Type</option>
-            {collectionTypes.map((mt) => (
+            {filteredCollectionTypes.map((mt) => (
               <option key={mt.id} value={mt.id}>{mt.name}</option>
             ))}
           </select>

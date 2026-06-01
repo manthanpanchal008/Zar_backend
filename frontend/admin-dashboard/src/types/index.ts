@@ -57,6 +57,8 @@ export type CategoryNew = {
   image_url?: string | null;
   is_active: number;
   isActive: boolean;
+  goldTypeId?: number | null;
+  goldTypeName?: string | null;
 };
 
 export type CollectionType = {
@@ -66,6 +68,10 @@ export type CollectionType = {
   image_url?: string | null;
   is_active: number;
   isActive: boolean;
+  goldTypeId?: number | null;
+  goldTypeName?: string | null;
+  categoryId?: number | null;
+  categoryName?: string | null;
 };
 
 export type Manufacturing = {
